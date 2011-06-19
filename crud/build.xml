@@ -137,6 +137,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="ru.susu.crud.MainTest" todir="${junit.output.dir}"/>
+            <test name="ru.susu.crud.TestTest" todir="${junit.output.dir}"/>
             <classpath refid="crud.classpath"/>
         </junit>
     </target>

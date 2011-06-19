@@ -7,7 +7,7 @@ import org.junit.Test;
 public class MainTest {
 	@Test
 	public void junitTest(){
-		assertEquals(3,1+1);
+		assertEquals(2,1+1);
 	}
 	
 

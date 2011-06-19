@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="desktop" name="ru.susu.crud.MainTest" tests="1" time="0.035" timestamp="2011-06-19T10:41:50">
+<testsuite errors="0" failures="0" hostname="desktop" name="ru.susu.crud.MainTest" tests="1" time="0.036" timestamp="2011-06-19T12:33:42">
   <properties>
     <property name="java.vendor" value="Sun Microsystems Inc." />
     <property name="env.SESSION_MANAGER" value="local/desktop:@/tmp/.ICE-unix/1324,unix/desktop:/tmp/.ICE-unix/1324" />
@@ -38,7 +38,7 @@
     <property name="sun.cpu.isalist" value="" />
     <property name="sun.jnu.encoding" value="UTF-8" />
     <property name="file.encoding.pkg" value="sun.io" />
-    <property name="ECLIPSE_HOME" value="/home/lqip32/eclipse_ee" />
+    <property name="ECLIPSE_HOME" value="../../../eclipse_ee" />
     <property name="file.separator" value="/" />
     <property name="java.specification.name" value="Java Platform API Specification" />
     <property name="env.GNOME_DESKTOP_SESSION_ID" value="this-is-deprecated" />
