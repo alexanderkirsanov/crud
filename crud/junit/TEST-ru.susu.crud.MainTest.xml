@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="desktop" name="ru.susu.crud.MainTest" tests="1" time="0.035" timestamp="2011-06-19T10:41:50">
+  <properties>
+    <property name="java.vendor" value="Sun Microsystems Inc." />
+    <property name="env.SESSION_MANAGER" value="local/desktop:@/tmp/.ICE-unix/1324,unix/desktop:/tmp/.ICE-unix/1324" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="eclipse.pdebuild.templates" value="/home/lqip32/eclipse_ee/plugins/org.eclipse.pde.build_3.6.2.R36x_20110203/templates//" />
+    <property name="sun.management.compiler" value="HotSpot Tiered Compilers" />
+    <property name="os.name" value="Linux" />
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/resources.jar:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/rt.jar:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/jsse.jar:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/jce.jar:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/charsets.jar:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/modules/jdk.boot.jar:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/classes" />
+    <property name="env.PWD" value="/home/lqip32" />
+    <property name="env.XDG_SESSION_COOKIE" value="3b10480b76b435ac853293ec4c7a9d90-1308144929.519712-960100111" />
+    <property name="sun.desktop" value="gnome" />
+    <property name="env.LANG" value="ru_RU.UTF-8" />
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="ant.home" value="/home/lqip32/eclipse_ee/plugins/org.apache.ant_1.7.1.v20100518-1145" />
+    <property name="java.runtime.version" value="1.6.0_24-b07" />
+    <property name="env.DEFAULTS_PATH" value="/usr/share/gconf/gnome.default.path" />
+    <property name="env.DISPLAY" value=":0.0" />
+    <property name="user.name" value="lqip32" />
+    <property name="env.USER" value="lqip32" />
+    <property name="env.SHELL" value="/bin/bash" />
+    <property name="env.MOZILLA_FIVE_HOME" value="/usr/lib/xulrunner-addons" />
+    <property name="env.DESKTOP_SESSION" value="gnome" />
+    <property name="env.XDG_DATA_DIRS" value="/usr/share/gnome:/usr/local/share/:/usr/share/" />
+    <property name="env.NLSPATH" value="/usr/dt/lib/nls/msg/%L/%N.cat" />
+    <property name="env.PATH" value="/home/lqip32/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games" />
+    <property name="user.language" value="ru" />
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386" />
+    <property name="ant.project.name" value="crud" />
+    <property name="java.version" value="1.6.0_24" />
+    <property name="user.timezone" value="" />
+    <property name="env.DBUS_SESSION_BUS_ADDRESS" value="unix:abstract=/tmp/dbus-OpMW5iPt4n,guid=f09cd1599fcd4b066c5701c100000026" />
+    <property name="sun.arch.data.model" value="32" />
+    <property name="env.COMPIZ_CONFIG_PROFILE" value="ubuntu" />
+    <property name="env.SSH_AGENT_PID" value="1406" />
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/endorsed" />
+    <property name="sun.cpu.isalist" value="" />
+    <property name="sun.jnu.encoding" value="UTF-8" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="ECLIPSE_HOME" value="/home/lqip32/eclipse_ee" />
+    <property name="file.separator" value="/" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="env.GNOME_DESKTOP_SESSION_ID" value="this-is-deprecated" />
+    <property name="java.class.version" value="50.0" />
+    <property name="env.GDMSESSION" value="gnome" />
+    <property name="env.GDM_KEYBOARD_LAYOUT" value="us" />
+    <property name="user.country" value="RU" />
+    <property name="java.home" value="/usr/lib/jvm/java-6-sun-1.6.0.24/jre" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="env.LOGNAME" value="lqip32" />
+    <property name="ant.file" value="/home/lqip32/git/Repository/crud/build.xml" />
+    <property name="os.version" value="2.6.38-8-generic-pae" />
+    <property name="path.separator" value=":" />
+    <property name="java.vm.version" value="19.1-b02" />
+    <property name="env.LANGUAGE" value="ru_RU:en" />
+    <property name="ant.library.dir" value="/home/lqip32/eclipse_ee/plugins/org.apache.ant_1.7.1.v20100518-1145/lib" />
+    <property name="junit.output.dir" value="junit" />
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+    <property name="env.WINDOWPATH" value="7" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="env.LIBGL_DRIVERS_PATH" value="/usr/lib/fglrx/dri" />
+    <property name="eclipse.pdebuild.scripts" value="/home/lqip32/eclipse_ee/plugins/org.eclipse.pde.build_3.6.2.R36x_20110203/scripts//" />
+    <property name="env.GDM_LANG" value="ru_RU.utf8" />
+    <property name="user.home" value="/home/lqip32" />
+    <property name="target" value="1.6" />
+    <property name="java.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="java.library.path" value="/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386/server:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/../lib/i386:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386/client:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386::/usr/java/packages/lib/i386:/lib:/usr/lib" />
+    <property name="java.vendor.url" value="http://java.sun.com/" />
+    <property name="java.vm.vendor" value="Sun Microsystems Inc." />
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+    <property name="java.class.path" value="/home/lqip32/git/Repository/crud/build/classes:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/tomcat-i18n-es.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/jasper-el.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/ecj-3.6.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/tomcat-dbcp.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/el-api.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/tomcat-util.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/annotations-api.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/servlet-api.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/jasper.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/catalina-ant.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/tomcat-coyote.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/tomcat-i18n-ja.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/catalina-ha.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/tomcat-i18n-fr.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/catalina-tribes.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/jsp-api.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/catalina.jar:/home/lqip32/tomcat/apache-tomcat-7.0.4/lib/tomcat-api.jar:/home/lqip32/eclipse_ee/plugins/org.junit_4.8.1.v4_8_1_v20100427-1100/junit.jar:/home/lqip32/eclipse_ee/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar:/home/lqip32/eclipse_ee/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-launcher.jar:/home/lqip32/eclipse_ee/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant.jar:/home/lqip32/eclipse_ee/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-junit.jar" />
+    <property name="ant.version" value="Apache Ant version 1.7.1 compiled on June 27 2008" />
+    <property name="ant.file.crud" value="/home/lqip32/git/Repository/crud/build.xml" />
+    <property name="env.UBUNTU_MENUPROXY" value="libappmenu.so" />
+    <property name="env.XFILESEARCHPATH" value="/usr/dt/app-defaults/%L/Dt" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="java.vm.specification.version" value="1.0" />
+    <property name="sun.os.patch.level" value="unknown" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="env.HOME" value="/home/lqip32" />
+    <property name="debuglevel" value="source,lines,vars" />
+    <property name="env.ANT_HOME" value="/home/lqip32/eclipse_ee/plugins/org.apache.ant_1.7.1.v20100518-1145" />
+    <property name="env.LD_LIBRARY_PATH" value="/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386/server:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/../lib/i386:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386/client:/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/i386:" />
+    <property name="eclipse.pdebuild.home" value="/home/lqip32/eclipse_ee/plugins/org.eclipse.pde.build_3.6.2.R36x_20110203/.//" />
+    <property name="java.io.tmpdir" value="/tmp" />
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi" />
+    <property name="env.SSH_AUTH_SOCK" value="/tmp/keyring-he2eve/ssh" />
+    <property name="os.arch" value="i386" />
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-6-sun-1.6.0.24/jre/lib/ext:/usr/java/packages/lib/ext" />
+    <property name="user.dir" value="/home/lqip32/git/Repository/crud" />
+    <property name="env.XAUTHORITY" value="/var/run/gdm/auth-for-lqip32-cx8ICn/database" />
+    <property name="env.MANDATORY_PATH" value="/usr/share/gconf/gnome.mandatory.path" />
+    <property name="env.SPEECHD_PORT" value="7560" />
+    <property name="env.GTK_MODULES" value="canberra-gtk-module" />
+    <property name="line.separator" value="
+" />
+    <property name="java.vm.name" value="Java HotSpot(TM) Server VM" />
+    <property name="basedir" value="/home/lqip32/git/Repository/crud" />
+    <property name="ant.java.version" value="1.6" />
+    <property name="env.ORBIT_SOCKETDIR" value="/tmp/orbit-lqip32" />
+    <property name="ant.core.lib" value="/home/lqip32/eclipse_ee/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant.jar" />
+    <property name="env.USERNAME" value="lqip32" />
+    <property name="source" value="1.6" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="java.specification.version" value="1.6" />
+    <property name="env.GNOME_KEYRING_CONTROL" value="/tmp/keyring-he2eve" />
+    <property name="env.XDG_CONFIG_DIRS" value="/etc/xdg/xdg-gnome:/etc/xdg" />
+  </properties>
+  <testcase classname="ru.susu.crud.MainTest" name="junitTest" time="0.0020" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
