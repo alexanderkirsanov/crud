@@ -6,7 +6,6 @@
               as the first entry and export the buildfile again. -->
 <project basedir="." default="build" name="crud">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="/home/lqip32/eclipse_ee"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
@@ -34,8 +33,8 @@
     <path id="Web App Libraries.libraryclasspath"/>
     <path id="EAR Libraries.libraryclasspath"/>
     <path id="JUnit 4.libraryclasspath">
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.8.1.v4_8_1_v20100427-1100/junit.jar"/>
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/junit.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
     </path>
     <path id="crud.classpath">
         <pathelement location="build/classes"/>
