@@ -10,4 +10,9 @@ public class TestTest {
 		Main main = new Main();
 		assertEquals(1,main.a());
 	}
+	
+	@Test
+	public void testByDem(){
+		assertTrue(true);
+	}
 }
