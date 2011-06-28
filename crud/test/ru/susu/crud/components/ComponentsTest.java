@@ -22,7 +22,7 @@ public class ComponentsTest {
 	}
 	
 	@Test
-	public void testGetAllowNullValue(){
+	public void testGetAllowNullValue(){d
 		assertTrue(testComponent.getAllowNullValue());
 	}
 	
