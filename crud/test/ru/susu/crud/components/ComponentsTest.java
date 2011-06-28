@@ -1,11 +1,12 @@
-package ru.susu.crud;
+package ru.susu.crud.components;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import ru.susu.crud.components.Component;
+import ru.susu.crud.Component;
+
 
 public class ComponentsTest {
 	Component testComponent;
@@ -29,6 +30,12 @@ public class ComponentsTest {
 	public void testSetAllowNullValue(){
 		testComponent.setAllowNullValue(false);
 		assertFalse(testComponent.getAllowNullValue());
+	}
+	
+	@Test
+	public void testCreateTextBox(){
+		Component testTextBox = new TextBox("1");
+		assertEquals(testTextBox.getName(), "1");
 	}
 
 	

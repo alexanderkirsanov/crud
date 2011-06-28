@@ -1,4 +1,4 @@
-package ru.susu.crud.components;
+package ru.susu.crud;
 
 public class Component {
 
