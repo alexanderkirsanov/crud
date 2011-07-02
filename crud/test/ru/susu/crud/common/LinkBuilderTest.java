@@ -38,13 +38,13 @@ public class LinkBuilderTest {
     }
 
     @Test
-    public void getParameters() throws Exception {
+    public void getParametersTest() throws Exception {
         linkBuilder.addParameters(parameters);
         assertEquals(5, linkBuilder.getParameters().size());
     }
 
     @Test
-    public void testClone() throws Exception {
+    public void cloneTest() throws Exception {
         assertEquals(linkBuilder, linkBuilder.clone());
     }
 }
