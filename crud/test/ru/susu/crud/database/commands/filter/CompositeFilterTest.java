@@ -7,27 +7,17 @@ import ru.susu.crud.database.dataset.Field;
 import static org.junit.Assert.assertEquals;
 
 class MyField extends Field {
-    private final String name;
 
-    public MyField(String name) {
-        this.name = name;
+
+    public MyField(String name, String alias, String sourceTable, boolean autoincrement) {
+        super(name, alias, sourceTable, autoincrement);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MyField myField = (MyField) o;
-
-        return !(name != null ? !name.equals(myField.name) : myField.name != null);
-
+    public int getEngFieldType() {
+        return 0;
     }
 
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
-    }
 }
 
 public class CompositeFilterTest {
@@ -43,9 +33,9 @@ public class CompositeFilterTest {
 
     @Test
     public void InnerFiltersTest() throws Exception {
-        MyField myField = new MyField("test");
+        MyField myField = new MyField("test", "alias", "table", false);
         compositeFilter.addFilter(myField, FieldFilter.contains("test"));
-        assertEquals(FieldFilter.contains("test"),compositeFilter.getInnerFilters().get(myField));
+        assertEquals(FieldFilter.contains("test"), compositeFilter.getInnerFilters().get(myField));
     }
 
     @Test

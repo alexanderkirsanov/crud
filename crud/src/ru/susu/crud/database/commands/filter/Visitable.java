@@ -8,4 +8,6 @@ public interface Visitable {
     void visitBetweenFieldFilter(BetweenFilter betweenFilter);
 
     void visitComponentFilter(CompositeFilter compositeFilter);
+
+    void visitIsNullFieldFilter(IsNullFieldFilter isNullFieldFilter);
 }
