@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ru.susu.crud.Component;
+import ru.susu.crud.TextBox;
 
 
 public class ComponentsTest {
@@ -22,7 +23,7 @@ public class ComponentsTest {
 	}
 	
 	@Test
-	public void testGetAllowNullValue(){d
+	public void testGetAllowNullValue(){
 		assertTrue(testComponent.getAllowNullValue());
 	}
 	
