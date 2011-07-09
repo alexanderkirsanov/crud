@@ -40,4 +40,16 @@ public class EditorTest {
         assertEquals(testTE.getValue(), testValue);
         assertEquals(testTE.getAllowHtmlCharacters(), false);
     }
+
+    @Test
+    public void textAreaEditCreateAndConfigureTest() {
+        TextAreaEdit testTAE = new TextAreaEdit("name", 10, 10);
+        assertEquals(testTAE.getName(), "name");
+        assertEquals(testTAE.getColumnCount(), 10);
+        assertEquals(testTAE.getRowCount(), 10);
+        testTAE.setColumnCount(15);
+        testTAE.setRowCount(13);
+        assertEquals(testTAE.getColumnCount(), 15);
+        assertEquals(testTAE.getRowCount(), 13);
+    }
 }

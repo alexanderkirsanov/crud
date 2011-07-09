@@ -1,14 +1,7 @@
 package ru.susu.crud.components.editors;
 
-/**
- * Created by IntelliJ IDEA.
- * User: dem
- * Date: 09.07.11
- * Time: 15:40
- * To change this template use File | Settings | File Templates.
- */
-public class TextEdit {
-    private String name;
+//TODO getHTMLvalue from TextEdit, customAttributes for TextEdit
+public class TextEdit extends CustomEditor {
     private int size;
     private int maxLength;
     private boolean passwordMode;
@@ -16,7 +9,7 @@ public class TextEdit {
     private boolean allowHtmlCharacters;
 
     public TextEdit(String name) {
-        this.name = name;
+        super(name);
         this.allowHtmlCharacters = true;
     }
 
@@ -24,10 +17,6 @@ public class TextEdit {
         this(name);
         this.size = size;
         this.maxLength = maxLength;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public int getSize() {
