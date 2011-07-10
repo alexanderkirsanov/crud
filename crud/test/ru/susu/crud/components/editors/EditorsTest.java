@@ -9,23 +9,24 @@ import static junit.framework.Assert.assertEquals;
 public class EditorsTest {
 
     private Object testValue;
+    private String testName;
 
     @Before
     public void setUp() {
         this.testValue = new Object();
+        this.testName = "testName";
     }
 
     @Test
     public void textEditCreateTest() {
-        String name = "name";
-        TextEdit testTE = new TextEdit(name);
-        assertEquals(testTE.getName(), name);
+        TextEdit testTE = new TextEdit(testName);
+        assertEquals(testTE.getName(), testName);
     }
 
     @Test
     public void textEditConfigureTest() {
-        TextEdit testTE = new TextEdit("name", 10, 10);
-        assertEquals(testTE.getName(), "name");
+        TextEdit testTE = new TextEdit(testName, 10, 10);
+        assertEquals(testTE.getName(), testName);
         assertEquals(testTE.getSize(), 10);
         assertEquals(testTE.getPasswordMode(), false);
         assertEquals(testTE.getMaxLength(), 10);
@@ -39,7 +40,7 @@ public class EditorsTest {
 
     @Test
     public void textEditGetValueAndAllowHtmlCharactersTest() {
-        TextEdit testTE = new TextEdit("name", 1, 1);
+        TextEdit testTE = new TextEdit(testName, 1, 1);
         assertEquals(testTE.getValue(), null);
         assertEquals(testTE.getAllowHtmlCharacters(), true);
         testTE.setValue(testValue);
@@ -50,8 +51,8 @@ public class EditorsTest {
 
     @Test
     public void textAreaEditCreateAndConfigureTest() {
-        TextAreaEdit testTAE = new TextAreaEdit("name", 10, 10);
-        assertEquals(testTAE.getName(), "name");
+        TextAreaEdit testTAE = new TextAreaEdit(testName, 10, 10);
+        assertEquals(testTAE.getName(), testName);
         assertEquals(testTAE.getColumnCount(), 10);
         assertEquals(testTAE.getRowCount(), 10);
         assertEquals(testTAE.getAllowHtmlCharacters(), true);
@@ -68,7 +69,7 @@ public class EditorsTest {
 
     @Test
     public void timeEditCreateAndConfigureTest() {
-        TimeEdit testTimeEdit = new TimeEdit("name");
+        TimeEdit testTimeEdit = new TimeEdit(testName);
         assertEquals(testTimeEdit.getValue(), null);
         assertEquals(testTimeEdit.getCustomAttributes(), null);
         assertEquals(testTimeEdit.isReadOnly(), false);
@@ -83,6 +84,16 @@ public class EditorsTest {
         assertEquals(testTimeEdit.isReadOnly(), true);
         assertEquals(testTimeEdit.getCustomAttributes(), testCustomAttributes);
         assertEquals(testTimeEdit.getFieldName(), testFieldName);
+    }
+
+    @Test
+    public void maskedEditCreateAndConfigureTest() {
+        String mask = "mask";
+        String hint = "hint";
+        MaskedEdit testME = new MaskedEdit(testName, mask, hint);
+        assertEquals(testME.getName(), testName);
+        assertEquals(testME.getMask(), mask);
+        assertEquals(testME.getHint(), hint);
     }
 
 
