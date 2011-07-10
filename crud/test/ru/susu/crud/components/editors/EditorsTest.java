@@ -96,5 +96,23 @@ public class EditorsTest {
         assertEquals(testME.getHint(), hint);
     }
 
+    @Test
+    public void spinEditCreateAndConfigureTest() {
+        SpinEdit testSE = new SpinEdit(testName);
+        double testMinValue = 0.0;
+        double testMaxValue = 0.0;
+        assertEquals(testSE.isUseConstraints(), false);
+        assertEquals(testSE.getMaxValue(), testMaxValue);
+        assertEquals(testSE.getMinValue(), testMinValue);
+        testSE.setUseConstraints(true);
+        testMinValue = 10;
+        testMaxValue = 13;
+        testSE.setMaxValue(testMaxValue);
+        testSE.setMinValue(testMinValue);
+        assertEquals(testSE.isUseConstraints(),true);
+        assertEquals(testSE.getMaxValue(),testMaxValue);
+        assertEquals(testSE.getMinValue(), testMinValue);
+    }
+
 
 }

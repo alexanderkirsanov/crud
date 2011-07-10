@@ -2,6 +2,7 @@ package ru.susu.crud.components.editors;
 
 public class MaskedEdit extends CustomEditor {
 
+    //TODO Normal mask
     private String mask;
     private String hint;
 
