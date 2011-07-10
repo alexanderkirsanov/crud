@@ -1,0 +1,41 @@
+<?xml version ="1.0"?>
+<settings>
+    <table name="test">
+        <column>
+            <name>id</name>
+            <type>integer</type>
+            <is_null>false</is_null>
+            <size>-1</size>
+        </column>
+
+        <column>
+            <name>name</name>
+            <type>string</type>
+            <is_null>true</is_null>
+            <size>10</size>
+        </column>
+    </table>
+
+    <table name="students">
+        <column>
+            <name>id</name>
+            <type>integer</type>
+            <is_null>true</is_null>
+            <size>-1</size>
+        </column>
+
+        <column>
+            <name>name</name>
+            <type>string</type>
+            <is_null>true</is_null>
+            <size>20</size>
+        </column>
+
+        <column>
+            <name>data</name>
+            <type>date</type>
+            <is_null>true</is_null>
+            <size>-1</size>
+        </column>
+    </table>
+</settings>
