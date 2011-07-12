@@ -34,7 +34,7 @@ public class EngDataReader {
             for (int i = 1; i <= columnCount; i++) {
                 line[i - 1] = resultSetOfData.getString(i);
             }
-            dataset.addBody(line,j);
+           // dataset.insertLine(line, j);
 
 //            if (resultSetOfData.isLast()) {
 //                composer.addEnd();
@@ -44,6 +44,10 @@ public class EngDataReader {
         }
         connection.setAutoCommit(true);
 
+    }
+
+    public Dataset getDataset(){
+        return this.dataset;
     }
 
 }
