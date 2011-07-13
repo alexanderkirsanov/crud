@@ -66,13 +66,17 @@ public class ComponentsTest {
         EntityInsertor testInsertor = new EntityInsertor();
         testInsertor.setSource(testList);
         String innerElem1 = "1233";
-        String innerElem2 = "asdf";
-        String innerElem3 = "0000";
-        testInsertor.insert(innerElem1, innerElem2, innerElem3);
+        testInsertor.insert(innerElem1);
         assertTrue(testInsertor.contains(innerElem1));
-        assertTrue(testInsertor.contains(innerElem2));
-        assertTrue(testInsertor.contains(innerElem3));
     }
 
-
+    @Test
+    public void EntityUpdaterTest() {
+        EntityUpdater testUpdater = new EntityUpdater();
+        testUpdater.setSource(testList);
+        assertTrue(testUpdater.contains(elem1));
+        testUpdater.update(1, "123");
+        assertFalse(testUpdater.contains(elem1));
+        assertTrue(testUpdater.contains("123"));
+    }
 }
