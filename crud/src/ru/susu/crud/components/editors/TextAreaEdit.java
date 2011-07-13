@@ -5,7 +5,7 @@ public class TextAreaEdit extends CustomEditor {
     private int rowCount;
     private boolean allowHtmlCharacters;
 
-    public TextAreaEdit(String name){
+    public TextAreaEdit(String name) {
         super(name);
         this.allowHtmlCharacters = true;
     }

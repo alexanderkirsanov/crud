@@ -6,7 +6,7 @@ public class EngDataReader {
     private String sql;
     private ConnectionProperties connectionProperties;
 
-    public EngDataReader(String sql, ConnectionProperties connectionProperties){
+    public EngDataReader(String sql, ConnectionProperties connectionProperties) {
         this.sql = sql;
         this.connectionProperties = connectionProperties;
 

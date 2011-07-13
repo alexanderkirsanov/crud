@@ -28,9 +28,9 @@ public abstract class CustomEditor extends Component {
     }
 
     public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;                
+        this.readOnly = readOnly;
     }
-    
+
     public String getCustomAttributes() {
         return customAttributes;
     }

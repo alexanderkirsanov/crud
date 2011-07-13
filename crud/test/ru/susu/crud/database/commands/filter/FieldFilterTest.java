@@ -38,16 +38,16 @@ public class FieldFilterTest {
 
     @Test
     public void getValueTest() throws Exception {
-        assertEquals(value,fieldFilter.getValue());
+        assertEquals(value, fieldFilter.getValue());
     }
 
     @Test
     public void getFilterTypeTest() throws Exception {
-        assertEquals(testType,fieldFilter.getFilterType());
+        assertEquals(testType, fieldFilter.getFilterType());
     }
 
     @Test
     public void getIgnoreFieldDataTypeTest() throws Exception {
-        assertEquals("false",fieldFilter.getIgnoreFieldDataType());
+        assertEquals("false", fieldFilter.getIgnoreFieldDataType());
     }
 }

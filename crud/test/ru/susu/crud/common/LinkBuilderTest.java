@@ -23,7 +23,7 @@ public class LinkBuilderTest {
         parameters = new HashMap<String, String>();
         parameters.put("xxx", "test");
         parameters.put("help", "yes");
-         parameters.put("test", "5");
+        parameters.put("test", "5");
     }
 
     @Test

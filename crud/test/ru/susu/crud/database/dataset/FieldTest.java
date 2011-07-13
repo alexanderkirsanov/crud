@@ -76,7 +76,7 @@ public class FieldTest {
     @Test
     public void getSqlValueTest() throws Exception {
         String sqlValue = "10";
-        assertEquals(sqlValue, myField.getSqlValue(sqlValue ));
+        assertEquals(sqlValue, myField.getSqlValue(sqlValue));
     }
 
 }

@@ -24,7 +24,7 @@ public class FieldInfoTest {
         assertEquals(name, fieldInfo.getName());
         String newName = "newName";
         fieldInfo.setName(newName);
-        assertEquals(newName,fieldInfo.getName());
+        assertEquals(newName, fieldInfo.getName());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class FieldInfoTest {
         assertEquals(tableName, fieldInfo.getTableName());
         String newTableName = "newTableName";
         fieldInfo.setTableName(newTableName);
-        assertEquals(newTableName,fieldInfo.getTableName());
+        assertEquals(newTableName, fieldInfo.getTableName());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class FieldInfoTest {
         assertEquals(fieldType, fieldInfo.getFieldType());
         int newFieldType = FieldType.BOOLEAN;
         fieldInfo.setFieldType(newFieldType);
-        assertEquals(newFieldType,fieldInfo.getFieldType());
+        assertEquals(newFieldType, fieldInfo.getFieldType());
     }
 
     @Test
@@ -48,6 +48,6 @@ public class FieldInfoTest {
         assertEquals(alias, fieldInfo.getAlias());
         String newAlias = "newAlias";
         fieldInfo.setAlias(newAlias);
-        assertEquals(newAlias,fieldInfo.getAlias());
+        assertEquals(newAlias, fieldInfo.getAlias());
     }
 }

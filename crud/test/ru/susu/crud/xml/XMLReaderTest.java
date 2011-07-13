@@ -10,12 +10,12 @@ public class XMLReaderTest {
     private XMLReader xmlReader;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         xmlReader = new XMLReader("table.xml");
     }
 
     @Test
-    public void readDefenitionTest(){
+    public void readDefenitionTest() {
         assertEquals(2, xmlReader.getTables().size());
     }
 }

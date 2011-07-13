@@ -35,7 +35,7 @@ public class FieldFilter implements Filterable {
         return ignoreFieldDataType;
     }
 
-    public void accept(Visitable filterVisitor){
+    public void accept(Visitable filterVisitor) {
         filterVisitor.visitFieldFilter(this);
     }
 

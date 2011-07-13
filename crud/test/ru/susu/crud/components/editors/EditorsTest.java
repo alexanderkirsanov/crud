@@ -34,7 +34,7 @@ public class EditorsTest {
         testTE.setMaxLength(30);
         testTE.setPasswordMode(true);
         assertEquals(testTE.getSize(), 25);
-        assertEquals(testTE.getMaxLength(),30);
+        assertEquals(testTE.getMaxLength(), 30);
         assertEquals(testTE.getPasswordMode(), true);
     }
 
@@ -109,9 +109,25 @@ public class EditorsTest {
         testMaxValue = 13;
         testSE.setMaxValue(testMaxValue);
         testSE.setMinValue(testMinValue);
-        assertEquals(testSE.isUseConstraints(),true);
-        assertEquals(testSE.getMaxValue(),testMaxValue);
+        assertEquals(testSE.isUseConstraints(), true);
+        assertEquals(testSE.getMaxValue(), testMaxValue);
         assertEquals(testSE.getMinValue(), testMinValue);
+    }
+
+    @Test
+    public void checkBoxCreateAndConfigureTest() {
+        CheckBox testCB = new CheckBox(testName);
+        assertEquals(testCB.checked(), false);
+        testCB.setValue(testValue);
+        assertEquals(testCB.checked(), true);
+    }
+
+    @Test
+    public void dateTimeEditCreateAndConfigureTest() {
+        DateTimeEdit testDTE = new DateTimeEdit(testName, false);
+        assertEquals(testDTE.getFormat(), EditorsConf.getInstance().dateWithoutTimePattern);
+        testDTE.setShowsTime(true);
+        assertEquals(testDTE.getFormat(), EditorsConf.getInstance().dateWithTimePattern);
     }
 
 

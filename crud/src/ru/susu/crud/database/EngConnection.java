@@ -47,16 +47,16 @@ public abstract class EngConnection {
         this.clientEncoding = clientEncoding;
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         return this.connected;
     }
 
-    protected boolean doExecSQL(String sql){
+    protected boolean doExecSQL(String sql) {
         return false;
     }
 
-    public void execSql(String sql) throws Exception{
-        if(!this.doExecSQL(sql)){
+    public void execSql(String sql) throws Exception {
+        if (!this.doExecSQL(sql)) {
             throw new Exception(lastError());
         }
     }
@@ -69,7 +69,7 @@ public abstract class EngConnection {
 
     //TODO: continue after reader is done
 
-    public String lastError(){
+    public String lastError() {
         return "";
     }
 

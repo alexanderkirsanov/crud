@@ -15,36 +15,37 @@ public class JoinInfoTest {
     private int inner;
 
     @Before
-    public void setUp(){
-        fieldInfo = new FieldInfo("testTable","name", FieldType.BLOB,"alias");
+    public void setUp() {
+        fieldInfo = new FieldInfo("testTable", "name", FieldType.BLOB, "alias");
         inner = JoinKind.INNER;
         table = "table";
         linkField = "linkField";
         alias = "alias";
         joinInfo = new JoinInfo(inner, table, fieldInfo, linkField, alias);
     }
+
     @Test
     public void getJoinKindTest() throws Exception {
-        assertEquals(inner,joinInfo.getJoinKind());
+        assertEquals(inner, joinInfo.getJoinKind());
     }
 
     @Test
     public void getTableTest() throws Exception {
-        assertEquals(table,joinInfo.getTable());
+        assertEquals(table, joinInfo.getTable());
     }
 
     @Test
     public void getFieldTest() throws Exception {
-        assertEquals(fieldInfo,joinInfo.getField());
+        assertEquals(fieldInfo, joinInfo.getField());
     }
 
     @Test
     public void getLinkFieldTest() throws Exception {
-        assertEquals(linkField,joinInfo.getLinkField());
+        assertEquals(linkField, joinInfo.getLinkField());
     }
 
     @Test
     public void getAliasTest() throws Exception {
-        assertEquals(alias,joinInfo.getAlias());
+        assertEquals(alias, joinInfo.getAlias());
     }
 }

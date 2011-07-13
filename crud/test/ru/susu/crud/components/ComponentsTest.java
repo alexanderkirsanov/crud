@@ -2,6 +2,7 @@ package ru.susu.crud.components;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.susu.crud.components.editors.TextBox;
 
 import static org.junit.Assert.*;
 

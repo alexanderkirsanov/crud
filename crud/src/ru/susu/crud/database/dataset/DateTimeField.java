@@ -19,7 +19,7 @@ public class DateTimeField extends Field {
 
     @Override
     public Object getSqlValue(String sql) throws ParseException {
-        return  simpleDateFormat.parse(sql);
+        return simpleDateFormat.parse(sql);
     }
 
     @Override
