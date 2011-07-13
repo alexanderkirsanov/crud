@@ -104,42 +104,24 @@ public class EngCommandImp {
         return new StringBuilder("'").append(simpleDateFormat.format(date)).append("'").toString();
     }
 
-    public String getFieldValueAsSQL(FieldInfo fieldInfo, Object value) throws Exception {
+    public String getFieldValueAsSQL(FieldInfo fieldInfo, String value) throws Exception {
         if (fieldInfo.getFieldType() == FieldType.NUMBER) {
-            if (value instanceof Number) {
-                Number number = (Number) value;
-                String result = number.toString();
-                return result.replace(',', '.');
+            if (value.contains(".") || value.contains(",")) {
+                Double aDouble = Double.parseDouble(value);
+                return aDouble.toString().replace(',', '.');
             } else {
-                throw new Exception("Field " + fieldInfo.getName() + " must be a number");
+                Integer aInteger = Integer.parseInt(value);
+                return aInteger.toString();
             }
         } else if (fieldInfo.getFieldType() == FieldType.DATE_TIME) {
-            if (value instanceof String) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                formatter.parse((String) value);
-            } else {
-                if (value instanceof Date) {
-                    return getDateTimeFieldValueAsSQL(fieldInfo, (Date) value);
-                }
-            }
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            formatter.parse((String) value);
         } else if (fieldInfo.getFieldType() == FieldType.TIME) {
-            if (value instanceof String) {
-                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-                formatter.parse((String) value);
-            } else {
-                if (value instanceof Date) {
-                    return getTimeFieldValueAsSQL(fieldInfo, (Date) value);
-                }
-            }
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            formatter.parse((String) value);
         } else if (fieldInfo.getFieldType() == FieldType.DATE) {
-            if (value instanceof String) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                formatter.parse((String) value);
-            } else {
-                if (value instanceof Date) {
-                    return getDateFieldValueAsSQL(fieldInfo, (Date) value);
-                }
-            }
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            formatter.parse((String) value);
         } else if (fieldInfo.getFieldType() == FieldType.BLOB) {
             RandomAccessFile f = new RandomAccessFile((String) value, "r");
             byte[] arr = new byte[(int) f.length()];
@@ -149,7 +131,7 @@ public class EngCommandImp {
         return new StringBuilder("'").append(escapeString((value.toString()))).append("'").toString();
     }
 
-    public String getFieldValueForInsert(FieldInfo fieldInfo, Object value, boolean setToDefault) throws Exception {
+    public String getFieldValueForInsert(FieldInfo fieldInfo, String value, boolean setToDefault) throws Exception {
         if (setToDefault)
             return "DEFAULT";
         if (value == null || ((String) value).length() == 0) {
@@ -157,34 +139,31 @@ public class EngCommandImp {
         }
 
         if ((fieldInfo.getFieldType() == FieldType.NUMBER)) {
-            if (value instanceof Integer || value instanceof Float) {
-                Number number = (Number) value;
-                if ("0".equals((number).toString())) return "NULL";
-            }
+
+            if ("0".equals(value)) return "NULL";
+
         }
         return getFieldValueAsSQL(fieldInfo, value);
     }
 
 
-    public String getFieldValueForDelete(FieldInfo fieldInfo, Object value) throws Exception {
+    public String getFieldValueForDelete(FieldInfo fieldInfo, String value) throws Exception {
         if (value == null || ((String) value).length() == 0) {
             return "NULL";
         }
 
         if ((fieldInfo.getFieldType() == FieldType.NUMBER)) {
-            if (value instanceof Number) {
-                if (((Number) value).toString() == "0") return "NULL";
-            }
+            if ("0".equals(value)) return "NULL";
         }
         return getFieldValueAsSQL(fieldInfo, value);
     }
 
 
-    public String getSetFieldValueClause(FieldInfo fieldInfo, Object value, String defaultValue) throws Exception {
+    public String getSetFieldValueClause(FieldInfo fieldInfo, String value, String defaultValue) throws Exception {
         return getFieldFullName(fieldInfo) + " = " + getDateTimeFieldAsSQLForUpdate(fieldInfo, value, defaultValue);
     }
 
-    public String getDateTimeFieldAsSQLForUpdate(FieldInfo fieldInfo, Object value, String defaultValue) throws Exception {
+    public String getDateTimeFieldAsSQLForUpdate(FieldInfo fieldInfo, String value, String defaultValue) throws Exception {
         if (value == null || ((String) value).length() == 0) {
             if (defaultValue != null) {
                 return "DEFAULT";
@@ -193,9 +172,7 @@ public class EngCommandImp {
         }
 
         if ((fieldInfo.getFieldType() == FieldType.NUMBER)) {
-            if (value instanceof Number) {
-                if (((Number) value).toString() == "0") return "NULL";
-            }
+            if ("0".equals(value)) return "NULL";
         }
         return getFieldValueAsSQL(fieldInfo, value);
     }
@@ -230,7 +207,7 @@ public class EngCommandImp {
                         : joinInfo.getTable())
 
                 .append(".").append(joinInfo.getLinkField()).
-                        append(" = ").append(joinInfo.getField()).toString();
+                        append(" = ").append(joinInfo.getField().getName()).toString();
 
     }
 

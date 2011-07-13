@@ -122,13 +122,13 @@ public class EditorsTest {
         assertEquals(testCB.checked(), true);
     }
 
-    @Test
+    /*@Test
     public void dateTimeEditCreateAndConfigureTest() {
         DateTimeEdit testDTE = new DateTimeEdit(testName, false);
         assertEquals(testDTE.getFormat(), EditorsConf.getInstance().dateWithoutTimePattern);
         testDTE.setShowsTime(true);
         assertEquals(testDTE.getFormat(), EditorsConf.getInstance().dateWithTimePattern);
-    }
+    } */
 
 
 }

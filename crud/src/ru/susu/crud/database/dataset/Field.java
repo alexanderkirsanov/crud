@@ -11,7 +11,7 @@ public abstract class Field {
     private String defaultValue;
 
 
-    public Field(String name, String alias, String sourceTable, boolean autoincrement) {
+    public Field(final String name, final String alias, final String sourceTable, boolean autoincrement) {
         this.name = name;
         this.alias = alias;
         this.sourceTable = sourceTable;
@@ -37,11 +37,6 @@ public abstract class Field {
     public String getSourceTable() {
         return sourceTable;
     }
-
-    public void setSourceTable(String sourceTable) {
-        this.sourceTable = sourceTable;
-    }
-
     public String getNameInDataset() {
         return this.getAlias().length() == 0 ? this.getName() : this.getAlias();
     }
