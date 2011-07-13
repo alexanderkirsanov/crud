@@ -11,10 +11,22 @@ import static org.junit.Assert.*;
 
 public class ComponentsTest {
     Component testComponent;
+    ArrayList<String> testList;
+    String elem1;
+    String elem2;
 
     @Before
     public void setUp() {
         testComponent = new Component("1");
+        testList = new ArrayList<String>();
+            testList.add("1111");
+            elem1 = "aaaaa";
+            elem2 = "bbbaadf";
+            testList.add(elem1);
+            testList.add(elem2);
+            testList.add("456");
+            testList.add("");
+
     }
 
     @Test
@@ -42,23 +54,24 @@ public class ComponentsTest {
     @Test
     public void EntityFinderTest(){
         EntityFinder testFinder = new EntityFinder();
-        ArrayList<String> testList = new ArrayList<String>();
         testFinder.setSource(testList);
-        testList.add("1111");
-        String elem1 = "aaaaa";
-        String elem2 = "bbbaadf";
-
-        testList.add(elem1);
-        testList.add(elem2);
-        testList.add("456");
-        testList.add("");
-
         ArrayList<String> findList = new ArrayList<String>();
         findList.add(elem1);
         findList.add(elem2);
-
         assertEquals(testFinder.find("a"), findList);
-        System.out.println(testFinder.find("a"));
+    }
+
+    @Test
+    public void EntityInsertorTest() {
+        EntityInsertor testInsertor = new EntityInsertor();
+        testInsertor.setSource(testList);
+        String innerElem1 = "1233";
+        String innerElem2 = "asdf";
+        String innerElem3 = "0000";
+        testInsertor.insert(innerElem1, innerElem2, innerElem3);
+        assertTrue(testInsertor.contains(innerElem1));
+        assertTrue(testInsertor.contains(innerElem2));
+        assertTrue(testInsertor.contains(innerElem3));
     }
 
 

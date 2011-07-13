@@ -2,12 +2,7 @@ package ru.susu.crud.components;
 
 import java.util.ArrayList;
 
-public class EntityFinder {
-    private ArrayList<String> source;
-
-    public void setSource(ArrayList<String> source) {
-        this.source = source;
-    }
+public class EntityFinder extends EntityWorker{
 
     public ArrayList<String> find(String s) {
         ArrayList<String> result = new ArrayList<String>();
