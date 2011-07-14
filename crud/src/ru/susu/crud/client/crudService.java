@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +19,18 @@ public interface crudService extends RemoteService {
 
     Map<String, String> update();
 
+    ArrayList<String> find(String s);
+
+    ArrayList<String> getStrings();
+
+
+
     /**
      * Utility/Convenience class.
      * Use crudService.App.getInstance() to access static instance of crudServiceAsync
      */
     public static class App {
-        private static crudServiceAsync ourInstance = GWT.create(crudService.class);
+        private static crudServiceAsync ourInstance = (crudServiceAsync) GWT.create(crudService.class);
 
         public static synchronized crudServiceAsync getInstance() {
             return ourInstance;

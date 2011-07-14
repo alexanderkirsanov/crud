@@ -2,6 +2,7 @@ package ru.susu.crud.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,4 +14,8 @@ public interface crudServiceAsync {
     void setTable(String tableName, AsyncCallback<Void> async);
 
     void update(AsyncCallback<Map<String, String>> async);
+
+    void find(String s, AsyncCallback<ArrayList<String>> async);
+
+    void getStrings(AsyncCallback<ArrayList<String>> async);
 }

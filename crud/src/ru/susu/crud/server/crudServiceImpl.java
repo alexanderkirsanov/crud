@@ -2,6 +2,7 @@ package ru.susu.crud.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import ru.susu.crud.client.crudService;
+import ru.susu.crud.components.EntityFinder;
 import ru.susu.crud.xml.Column;
 import ru.susu.crud.xml.TableDefinition;
 import ru.susu.crud.xml.XMLReader;
@@ -12,8 +13,21 @@ import java.util.List;
 import java.util.Map;
 
 public class crudServiceImpl extends RemoteServiceServlet implements crudService {
+    EntityFinder finder = new EntityFinder();
+    private ArrayList<String> sourceForView;
     private String tableName;
     private Map<String, TableDefinition> tableDefinitionMap = new HashMap<String, TableDefinition>();
+
+    public crudServiceImpl(){
+        sourceForView = new ArrayList<String>();
+        sourceForView.add("13456");
+        sourceForView.add("aaaabbbb");
+        sourceForView.add("33333");
+        sourceForView.add("xfdg");
+        sourceForView.add("asderx");
+        sourceForView.add("444443");
+        this.finder.setSource(sourceForView);
+    }
 
     // Implementation of sample interface method
     public String getMessage(String msg) {
@@ -48,5 +62,15 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         }
         return mapOfString;
 
+    }
+
+    @Override
+    public ArrayList<String> find(String s) {
+        return this.finder.find(s);
+    }
+
+    @Override
+    public ArrayList<String> getStrings() {
+        return this.sourceForView;
     }
 }
