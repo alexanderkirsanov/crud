@@ -8,10 +8,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class EngCommandImp {
-    public EngCommandImp() {
-        //TODO: implement constructor
-    }
-
     protected String createCaseSensitiveLikeExpression(String left, String right) {
         return new StringBuilder(left).append(" LIKE ").append(right).toString();
     }

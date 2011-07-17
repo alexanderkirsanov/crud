@@ -3,16 +3,15 @@ package ru.susu.crud.database.dataset;
 import ru.susu.crud.database.commands.*;
 import ru.susu.crud.database.commands.filter.Filterable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Dataset {
     private EngCommandImp engCommandImp = new EngCommandImp();
     private Map<String, List<String>> mapOfData = new HashMap<String, List<String>>();
     private Map<Field, Filterable> filters = new HashMap<Field, Filterable>();
     private List<Field> listOfField;
+    private Field sortbyField;
+    private String sortType;
 
 
     public Dataset(List<Field> fields) {
@@ -24,7 +23,18 @@ public class Dataset {
         }
     }
 
-    public void addFilter(Field field, Filterable filterable) {
+    public void addSortBy(Field field, String type) {
+        this.sortbyField = field;
+        this.sortType = type;
+    }
+
+    public void clearSortType() {
+        this.sortbyField = null;
+        this.sortType = "";
+    }
+
+    public void addFilter(Field field, Filterable filterable) throws Exception {
+        if (!listOfField.contains(field)) throw new Exception("IncorrectFilter");
         this.filters.put(field, filterable);
     }
 
@@ -111,7 +121,11 @@ public class Dataset {
         dataUpdated();
     }
 
+    public void selectData() throws Exception {
 
+        String selectCommand = new SelectCommand(listOfField.get(0).getSourceTable()).createCommand(listOfField, filters, sortbyField, sortType);
+
+    }
 
 
     public void dataUpdated() {
