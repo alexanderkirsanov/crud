@@ -11,8 +11,8 @@ public class NoPredicateFilter implements Filterable {
         return innerFilter;
     }
 
-    public void accept(Visitable filterVisitor) {
-        filterVisitor.visitNoPredicateFilter(this);
+    public String accept(Visitable filterVisitor) throws Exception {
+        return filterVisitor.visitNoPredicateFilter(this);
     }
 
     @Override

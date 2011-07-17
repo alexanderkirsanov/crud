@@ -1,8 +1,6 @@
 package ru.susu.crud.database.dataset;
 
-import ru.susu.crud.database.commands.EngCommandImp;
-import ru.susu.crud.database.commands.FieldInfo;
-import ru.susu.crud.database.commands.InsertCommand;
+import ru.susu.crud.database.commands.*;
 import ru.susu.crud.database.commands.filter.Filterable;
 
 import java.util.ArrayList;
@@ -28,6 +26,10 @@ public class Dataset {
 
     public void addFilter(Field field, Filterable filterable) {
         this.filters.put(field, filterable);
+    }
+
+    public void clearFilter() {
+        this.filters.clear();
     }
 
     public void insertLine(String[] line) throws Exception {
@@ -74,11 +76,12 @@ public class Dataset {
         if (line.length != listOfField.size()) throw new Exception("Incorrect Line");
         int i = 0;
         for (Field field : listOfField) {
-            FieldInfo fieldInfo = getFieldInfo(field);
+            FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
             mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line[i], false));
             i++;
         }
-        String insertCommand = new InsertCommand(listOfField.get(0).getName()).createCommand(mapOfParameters);
+        String insertCommand = new InsertCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfParameters);
+        //TODO:executeStatement
         dataUpdated();
     }
 
@@ -86,20 +89,30 @@ public class Dataset {
         Map<String, String> mapOfParameters = new HashMap<String, String>();
         Map<String, String> mapOfOldParameters = new HashMap<String, String>();
         if (line.length != listOfField.size()) throw new Exception("Incorrect Line");
-        if (lineNumber != mapOfData.keySet().size()) throw new Exception("Incorrect Line number");
         for (Field field : listOfField) {
-            FieldInfo fieldInfo = getFieldInfo(field);
+            FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
             mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line[lineNumber], false));
             mapOfOldParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, mapOfData.get(fieldInfo.getName()).get(lineNumber), false));
         }
-
-
+        String updateCommand = new UpdateCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfOldParameters, mapOfParameters);
+        //TODO:executeStatement
+        dataUpdated();
     }
 
-    private FieldInfo getFieldInfo(Field field) {
-        return new FieldInfo(field.getSourceTable(), field.getName(), field.getEngFieldType(), field.getAlias());
+    public void deleteData(int lineNumber) throws Exception {
+        Map<String, String> mapOfParameters = new HashMap<String, String>();
 
+        for (Field field : listOfField) {
+            FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
+            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForDelete(fieldInfo, mapOfData.get(field.getName()).get(lineNumber)));
+        }
+        String deleteCommand = new DeleteCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfParameters);
+        //TODO:executeStatement
+        dataUpdated();
     }
+
+
+
 
     public void dataUpdated() {
 

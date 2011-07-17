@@ -2,7 +2,7 @@ package ru.susu.crud.database.commands.filter;
 
 public class IsNullFieldFilter implements Filterable {
 
-    public void accept(Visitable filterVisitor) {
-        filterVisitor.visitIsNullFieldFilter(this);
+    public String accept(Visitable filterVisitor) {
+        return  filterVisitor.visitIsNullFieldFilter(this);
     }
 }

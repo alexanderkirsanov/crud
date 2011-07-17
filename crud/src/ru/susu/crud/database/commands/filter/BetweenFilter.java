@@ -18,8 +18,8 @@ public class BetweenFilter implements Filterable {
         return startValue;
     }
 
-    public void accept(Visitable filterVisitor) {
-        filterVisitor.visitBetweenFieldFilter(this);
+    public String accept(Visitable filterVisitor) throws Exception {
+       return filterVisitor.visitBetweenFieldFilter(this);
     }
 
     @Override

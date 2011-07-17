@@ -1,5 +1,7 @@
 package ru.susu.crud.database.commands;
 
+import ru.susu.crud.database.dataset.Field;
+
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -26,7 +28,10 @@ public class EngCommandImp {
         return createCaseInsensitiveLikeExpression(getCastedToCharFieldExpression(field), getValueAsSQLString(value));
     }
 
-    //TODO:FilterCondition generator && Connection factory;
+    public FieldInfo getFieldInfo(Field field) {
+        return new FieldInfo(field.getSourceTable(), field.getName(), field.getEngFieldType(), field.getAlias());
+
+    }
 
     protected String getDateTimeFieldAsSQLForSelect(FieldInfo fieldInfo) {
         return getFieldFullName(fieldInfo);
@@ -115,26 +120,26 @@ public class EngCommandImp {
             }
         } else if (fieldInfo.getFieldType() == FieldType.DATE_TIME) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            formatter.parse((String) value);
+            formatter.parse(value);
         } else if (fieldInfo.getFieldType() == FieldType.TIME) {
             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-            formatter.parse((String) value);
+            formatter.parse(value);
         } else if (fieldInfo.getFieldType() == FieldType.DATE) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            formatter.parse((String) value);
+            formatter.parse(value);
         } else if (fieldInfo.getFieldType() == FieldType.BLOB) {
-            RandomAccessFile f = new RandomAccessFile((String) value, "r");
+            RandomAccessFile f = new RandomAccessFile(value, "r");
             byte[] arr = new byte[(int) f.length()];
             f.readFully(arr);
             return new StringBuilder("'").append(Arrays.toString(arr)).append("'").toString();
         }
-        return new StringBuilder("'").append(escapeString((value.toString()))).append("'").toString();
+        return new StringBuilder("'").append(escapeString((value))).append("'").toString();
     }
 
     public String getFieldValueForInsert(FieldInfo fieldInfo, String value, boolean setToDefault) throws Exception {
         if (setToDefault)
             return "DEFAULT";
-        if (value == null || ((String) value).length() == 0) {
+        if (value == null || (value).length() == 0) {
             return "NULL";
         }
 
@@ -148,7 +153,7 @@ public class EngCommandImp {
 
 
     public String getFieldValueForDelete(FieldInfo fieldInfo, String value) throws Exception {
-        if (value == null || ((String) value).length() == 0) {
+        if (value == null || (value).length() == 0) {
             return "NULL";
         }
 
@@ -164,7 +169,7 @@ public class EngCommandImp {
     }
 
     public String getDateTimeFieldAsSQLForUpdate(FieldInfo fieldInfo, String value, String defaultValue) throws Exception {
-        if (value == null || ((String) value).length() == 0) {
+        if (value == null || (value).length() == 0) {
             if (defaultValue != null) {
                 return "DEFAULT";
             }

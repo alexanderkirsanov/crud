@@ -3,7 +3,7 @@ package ru.susu.crud.database.commands.filter;
 public class FieldFilter implements Filterable {
     private final String value;
     private final String filterType;
-    private String ignoreFieldDataType;
+    private String ignoreFieldDataType = "false";
 
     public static FieldFilter contains(String value) {
         return new FieldFilter(new StringBuilder("%").append(value).append("%").toString(), "ILIKE", "true");
@@ -35,8 +35,8 @@ public class FieldFilter implements Filterable {
         return ignoreFieldDataType;
     }
 
-    public void accept(Visitable filterVisitor) {
-        filterVisitor.visitFieldFilter(this);
+    public String accept(Visitable filterVisitor) {
+        return filterVisitor.visitFieldFilter(this);
     }
 
     @Override

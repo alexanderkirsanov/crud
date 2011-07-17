@@ -1,13 +1,13 @@
 package ru.susu.crud.database.commands.filter;
 
 public interface Visitable {
-    void visitFieldFilter(FieldFilter fieldFilter);
+    String visitFieldFilter(FieldFilter fieldFilter);
 
-    void visitNoPredicateFilter(NoPredicateFilter noPredicateFilter);
+    String visitNoPredicateFilter(NoPredicateFilter noPredicateFilter) throws Exception;
 
-    void visitBetweenFieldFilter(BetweenFilter betweenFilter);
+    String visitBetweenFieldFilter(BetweenFilter betweenFilter) throws Exception;
 
-    void visitComponentFilter(CompositeFilter compositeFilter);
+    String visitIsNullFieldFilter(IsNullFieldFilter isNullFieldFilter);
 
-    void visitIsNullFieldFilter(IsNullFieldFilter isNullFieldFilter);
+
 }
