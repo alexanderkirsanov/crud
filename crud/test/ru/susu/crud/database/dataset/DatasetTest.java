@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.susu.crud.database.ConnectionProperties;
+import ru.susu.crud.database.commands.filter.FieldFilter;
 import ru.susu.crud.database.connection.ConnectionManager;
 
 import java.sql.SQLException;
@@ -26,7 +27,7 @@ public class DatasetTest {
         ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         statement = connectionManager.getConnection().createStatement();
-        statement.executeUpdate("CREATE TABLE IF NOT EXISTS test(id INTEGER PRIMARY KEY, "
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS test(id INTEGER KEY, "
                 + "name VARCHAR(60), age INTEGER);");
 
         dataset = new Dataset(new LinkedList<Field>() {{
@@ -75,8 +76,43 @@ public class DatasetTest {
     }
 
     @Test
+    public void filterDataTest() throws Exception {
+        Map<Field, String> mapOfData = new HashMap<Field, String>() {
+            {
+                put(new IntegerField("id", "", "test", true), "1");
+                put(new StringField("name", "", "test", false), "alex");
+                put(new IntegerField("age", "", "test", true), "23");
+            }
+        };
+        Map<Field, String> secondMapOfData = new HashMap<Field, String>() {
+            {
+                put(new IntegerField("id", "", "test", true), "2");
+                put(new StringField("name", "", "test", false), "ivan");
+                put(new IntegerField("age", "", "test", true), "23");
+            }
+        };
+        dataset.insertData(mapOfData);
+        dataset.insertData(secondMapOfData);
+        assertEquals(2, dataset.getRowCount());
+        dataset.addFilter(new IntegerField("id", "", "test", true), FieldFilter.equals("1"));
+        dataset.selectData();
+        assertEquals(1, dataset.getRowCount());
+        dataset.clearFilter();
+        dataset.selectData();
+        assertEquals(2, dataset.getRowCount());
+        dataset.addFilter(new IntegerField("id", "", "test", true), FieldFilter.equals("23"));
+        dataset.selectData();
+        dataset.clearFilter();
+        assertEquals(0, dataset.getRowCount());
+        dataset.addFilter(new IntegerField("age", "", "test", true), FieldFilter.equals("23"));
+        dataset.selectData();
+        dataset.clearFilter();
+        assertEquals(2, dataset.getRowCount());
+    }
+
+    @Test
     public void updateDataTest() throws Exception {
-                Map<Field, String> mapOfData = new HashMap<Field, String>() {
+        Map<Field, String> mapOfData = new HashMap<Field, String>() {
             {
                 put(new IntegerField("id", "", "test", true), "1");
                 put(new StringField("name", "", "test", false), "alex");
@@ -95,19 +131,19 @@ public class DatasetTest {
         assertTrue(Arrays.toString(dataset.getLine(0)).contains("Ivan"));
     }
 
-        @Test
+    @Test
     public void deleteDataTest() throws Exception {
-                Map<Field, String> mapOfData = new HashMap<Field, String>() {
+        Map<Field, String> mapOfData = new HashMap<Field, String>() {
             {
                 put(new IntegerField("id", "", "test", true), "1");
                 put(new StringField("name", "", "test", false), "alex");
                 put(new IntegerField("age", "", "test", true), "23");
             }
         };
-            dataset.insertData(mapOfData);
-            assertEquals(1,dataset.getRowCount());
+        dataset.insertData(mapOfData);
+        assertEquals(1, dataset.getRowCount());
         dataset.deleteData(0);
-        assertEquals(0,dataset.getRowCount());
+        assertEquals(0, dataset.getRowCount());
     }
 
     @After
@@ -116,7 +152,7 @@ public class DatasetTest {
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         statement = connectionManager.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS test;");
-        statement.executeUpdate("CREATE TABLE IF NOT EXISTS test(id INTEGER PRIMARY KEY, "
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS test(id INTEGER KEY, "
                 + "name VARCHAR(60), age INTEGER);");
     }
 }
