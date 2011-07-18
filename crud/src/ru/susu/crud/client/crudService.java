@@ -23,6 +23,7 @@ public interface crudService extends RemoteService {
 
     ArrayList<String> getStrings();
 
+    List<String> getHeaders(String s);
 
 
     /**

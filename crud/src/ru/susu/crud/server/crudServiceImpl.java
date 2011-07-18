@@ -36,14 +36,18 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
 
     @Override
     public List<String> getTables() {
-        XMLReader xmlReader = new XMLReader("table.xml");
-        List<String> tables = new ArrayList<String>();
-        tableDefinitionMap = xmlReader.getTables();
+        List<String> tables = prepareTableDefinitionMap();
         for (String table : tableDefinitionMap.keySet()) {
             tables.add(table);
         }
         return tables;
+    }
 
+    private List<String> prepareTableDefinitionMap() {
+        XMLReader xmlReader = new XMLReader("table.xml");
+        List<String> tables = new ArrayList<String>();
+        tableDefinitionMap = xmlReader.getTables();
+        return tables;
     }
 
     @Override
@@ -72,5 +76,16 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     @Override
     public ArrayList<String> getStrings() {
         return this.sourceForView;
+    }
+
+    @Override
+    public List<String> getHeaders(String tableName) {
+        this.tableName = tableName;
+        List<String> result = new ArrayList<String>();
+        this.prepareTableDefinitionMap();
+        for (Column c : this.tableDefinitionMap.get(this.tableName).getColumns()) {
+            result.add(c.getName());
+        }
+        return result;
     }
 }

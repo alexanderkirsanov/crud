@@ -3,6 +3,7 @@ package ru.susu.crud.components;
 import org.junit.Before;
 import org.junit.Test;
 import ru.susu.crud.components.editors.TextBox;
+import ru.susu.crud.xml.XMLReader;
 
 import java.util.ArrayList;
 
@@ -78,5 +79,7 @@ public class ComponentsTest {
         testUpdater.update(1, "123");
         assertFalse(testUpdater.contains(elem1));
         assertTrue(testUpdater.contains("123"));
+        XMLReader xml = new XMLReader("table.xml");
+        System.out.println(xml.getTables().keySet());
     }
 }

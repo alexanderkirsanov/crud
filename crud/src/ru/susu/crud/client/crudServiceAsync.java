@@ -18,4 +18,6 @@ public interface crudServiceAsync {
     void find(String s, AsyncCallback<ArrayList<String>> async);
 
     void getStrings(AsyncCallback<ArrayList<String>> async);
+
+    void getHeaders(String s, AsyncCallback<List<String>> async);
 }
