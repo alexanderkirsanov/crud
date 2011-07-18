@@ -2,8 +2,14 @@ package ru.susu.crud.database.dataset;
 
 import ru.susu.crud.database.commands.*;
 import ru.susu.crud.database.commands.filter.Filterable;
+import ru.susu.crud.database.connection.ConnectionManager;
+import ru.susu.crud.database.datareader.EngDataReader;
+import ru.susu.crud.database.datareader.EngDataWriter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Dataset {
     private EngCommandImp engCommandImp = new EngCommandImp();
@@ -12,15 +18,14 @@ public class Dataset {
     private List<Field> listOfField;
     private Field sortbyField;
     private String sortType;
+    private ConnectionManager connectionManager;
 
 
-    public Dataset(List<Field> fields) {
-        int i = 0;
+    public Dataset(List<Field> fields, ConnectionManager connectionManager) {
         listOfField = fields;
-        for (Field field : fields) {
-            mapOfData.put(field.getName(), new ArrayList<String>());
-            i++;
-        }
+        clear();
+        this.connectionManager = connectionManager;
+
     }
 
     public void addSortBy(Field field, String type) {
@@ -47,14 +52,17 @@ public class Dataset {
         if (line.length != mapOfData.keySet().size()) {
             throw new Exception("Incorrect Line");
         }
-        for (List<String> value : mapOfData.values()) {
-            value.add(line[i]);
+        for (Field field : listOfField) {
+            mapOfData.get(field.getName()).add(line[i]);
             i++;
         }
     }
 
     public void clear() {
         mapOfData.clear();
+        for (Field field : listOfField) {
+            mapOfData.put(field.getName(), new ArrayList<String>());
+        }
     }
 
     public void removeLine(int linePosition) {
@@ -81,32 +89,37 @@ public class Dataset {
         return 0;
     }
 
-    public void insertData(String[] line) throws Exception {
+    public void insertData(Map<Field, String> line) throws Exception {
         Map<String, String> mapOfParameters = new HashMap<String, String>();
-        if (line.length != listOfField.size()) throw new Exception("Incorrect Line");
+        if (line.keySet().size() != listOfField.size()) throw new Exception("Incorrect Line");
         int i = 0;
         for (Field field : listOfField) {
             FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
-            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line[i], false));
+            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line.get(field), false));
             i++;
         }
         String insertCommand = new InsertCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfParameters);
-        //TODO:executeStatement
-        dataUpdated();
+        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, insertCommand);
+        engDataWriter.executeInsert();
+        selectData();
     }
 
-    public void updateData(int lineNumber, String[] line) throws Exception {
+    public void updateData(int lineNumber, Map<Field, String> line) throws Exception {
         Map<String, String> mapOfParameters = new HashMap<String, String>();
         Map<String, String> mapOfOldParameters = new HashMap<String, String>();
-        if (line.length != listOfField.size()) throw new Exception("Incorrect Line");
+        if (line.keySet().size() != listOfField.size()) throw new Exception("Incorrect Line");
         for (Field field : listOfField) {
             FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
-            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line[lineNumber], false));
-            mapOfOldParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, mapOfData.get(fieldInfo.getName()).get(lineNumber), false));
+            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line.get(field), false));
+            String oldParameter = engCommandImp.getFieldFullName(fieldInfo);
+            String value = mapOfData.get(fieldInfo.getName()).get(lineNumber);
+            String oldParameterValue = engCommandImp.getFieldValueForInsert(fieldInfo, value, false);
+            mapOfOldParameters.put(oldParameter, oldParameterValue);
         }
         String updateCommand = new UpdateCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfOldParameters, mapOfParameters);
-        //TODO:executeStatement
-        dataUpdated();
+        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, updateCommand);
+        engDataWriter.executeUpdate();
+        selectData();
     }
 
     public void deleteData(int lineNumber) throws Exception {
@@ -114,17 +127,21 @@ public class Dataset {
 
         for (Field field : listOfField) {
             FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
-            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForDelete(fieldInfo, mapOfData.get(field.getName()).get(lineNumber)));
+            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo),
+                    engCommandImp.getFieldValueForDelete(fieldInfo,
+                            mapOfData.get(field.getName()).get(lineNumber)));
         }
         String deleteCommand = new DeleteCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfParameters);
-        //TODO:executeStatement
-        dataUpdated();
+        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, deleteCommand);
+        engDataWriter.executeInsert();
+        selectData();
     }
 
     public void selectData() throws Exception {
-
         String selectCommand = new SelectCommand(listOfField.get(0).getSourceTable()).createCommand(listOfField, filters, sortbyField, sortType);
-
+        EngDataReader engDataReader = new EngDataReader(selectCommand, this, connectionManager);
+        engDataReader.execute();
+        dataUpdated();
     }
 
 

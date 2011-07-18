@@ -1,6 +1,5 @@
 package ru.susu.crud.database.commands;
 
-import com.sun.istack.internal.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 import ru.susu.crud.database.commands.filter.FieldFilter;
@@ -22,7 +21,7 @@ public class SelectCommandTest {
     private LinkedList<Field> listOfField;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         nameField = new StringField("name", "", "test", false);
         ageField = new IntegerField("age", "", "test", false);
         listOfField = new LinkedList<Field>() {{
@@ -33,6 +32,7 @@ public class SelectCommandTest {
 
 
     }
+
     @Test
     public void createCommandTest() throws Exception {
         Map<Field, Filterable> mapOfFilters = new HashMap<Field, Filterable>();
@@ -43,7 +43,7 @@ public class SelectCommandTest {
                 selectCommand.createCommand(listOfField, mapOfFilters, ageField, "ASC"));
     }
 
-        @Test
+    @Test
     public void createSimpleCommandTest() throws Exception {
         SelectCommand selectCommand = new SelectCommand("test");
         assertEquals("SELECT id, name, age FROM test",

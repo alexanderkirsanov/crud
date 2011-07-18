@@ -16,16 +16,16 @@ public class UpdateCommand {
         Iterator<String> parameterIterator = mapOfParameters.keySet().iterator();
         while (parameterIterator.hasNext()) {
             String parameterName = parameterIterator.next();
-            commandBuilder.append(parameterName).append(" = '").append(mapOfParameters.get(parameterName)).append("'");
+            commandBuilder.append(parameterName).append(" = ").append(mapOfParameters.get(parameterName));
             if (parameterIterator.hasNext()) {
                 commandBuilder.append(", ");
             }
         }
-        commandBuilder.append(" WHERE '");
+        commandBuilder.append(" WHERE ");
         Iterator<String> whereIterator = mapOfOldParameters.keySet().iterator();
         while (whereIterator.hasNext()) {
            String parameterName = whereIterator.next();
-            commandBuilder.append(parameterName).append(" = '").append(mapOfOldParameters.get(parameterName)).append("'");
+            commandBuilder.append(parameterName).append(" = ").append(mapOfOldParameters.get(parameterName));
             if (whereIterator.hasNext()) {
                 commandBuilder.append(" AND ");
             }

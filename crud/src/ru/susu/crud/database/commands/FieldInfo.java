@@ -44,4 +44,14 @@ public class FieldInfo {
     public void setAlias(String alias) {
         this.alias = alias;
     }
+
+    @Override
+    public String toString() {
+        return "FieldInfo{" +
+                "tableName='" + tableName + '\'' +
+                ", name='" + name + '\'' +
+                ", fieldType=" + fieldType +
+                ", alias='" + alias + '\'' +
+                '}';
+    }
 }

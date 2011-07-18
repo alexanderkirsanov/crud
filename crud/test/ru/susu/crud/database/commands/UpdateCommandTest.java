@@ -23,7 +23,7 @@ public class UpdateCommandTest {
             put("surname", "petrov");
         }};
 
-        assertEquals("UPDATE test SET id = '12', name = 'ivan', surname = 'ivanov' WHERE 'id = '12' AND name = 'petr' AND surname = 'petrov'",
+        assertEquals("UPDATE test SET id = 12, name = ivan, surname = ivanov WHERE id = 12 AND name = petr AND surname = petrov",
                 updateCommand.createCommand(oldParameters, actualParameters));
 
         UpdateCommand simpleUpdateCommand = new UpdateCommand("test");
@@ -34,7 +34,7 @@ public class UpdateCommandTest {
         Map<String, String> simpleOldParameters = new HashMap<String, String>() {{
             put("id", "13");
         }};
-        assertEquals("UPDATE test SET id = '12' WHERE 'id = '13'",
+        assertEquals("UPDATE test SET id = 12 WHERE id = 13",
                         updateCommand.createCommand(simpleOldParameters, simpleActualParameters));
     }
 }

@@ -16,7 +16,7 @@ public class DeleteCommand {
         Iterator<String> parameterIterator = mapOfParameters.keySet().iterator();
         while (parameterIterator.hasNext()) {
             String parameterName = parameterIterator.next();
-            commandBuilder.append(parameterName).append(" = '").append(mapOfParameters.get(parameterName)).append("'");
+            commandBuilder.append(parameterName).append(" = ").append(mapOfParameters.get(parameterName));
             if (parameterIterator.hasNext()) {
                 commandBuilder.append(" AND ");
             }

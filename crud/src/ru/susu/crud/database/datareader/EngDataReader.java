@@ -6,7 +6,6 @@ import ru.susu.crud.database.dataset.Dataset;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 
 public class EngDataReader {
     private String sql;
@@ -19,14 +18,14 @@ public class EngDataReader {
         this.connectionManager = connectionManager;
     }
 
-    public void execute() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void execute() throws Exception{
         java.sql.Connection connection = connectionManager.getConnection();
         PreparedStatement selectDataFromTable = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
         ResultSet resultSetOfData = selectDataFromTable.executeQuery();
         ResultSetMetaData resultSetMetaData = resultSetOfData.getMetaData();
         int columnCount = resultSetMetaData.getColumnCount();
-
+        dataset.clear();
         String[] line = new String[columnCount];
         int j = 0;
         while (resultSetOfData.next()) {
@@ -34,20 +33,10 @@ public class EngDataReader {
             for (int i = 1; i <= columnCount; i++) {
                 line[i - 1] = resultSetOfData.getString(i);
             }
-           // dataset.insertLine(line, j);
-
-//            if (resultSetOfData.isLast()) {
-//                composer.addEnd();
-//            } else {
-//                composer.addEndLine();
-//            }
+            dataset.insertLine(line);
         }
+        connection.commit();
         connection.setAutoCommit(true);
-
-    }
-
-    public Dataset getDataset(){
-        return this.dataset;
     }
 
 }

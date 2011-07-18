@@ -17,13 +17,13 @@ public class DeleteCommandTest {
             put("surname", "ivanov");
         }};
 
-        assertEquals("DELETE FROM table WHERE id = '12' AND name = 'ivan' AND surname = 'ivanov'", deleteCommand.createCommand(parameters));
+        assertEquals("DELETE FROM table WHERE id = 12 AND name = ivan AND surname = ivanov", deleteCommand.createCommand(parameters));
 
         Map<String, String> simpleParameters = new HashMap<String, String>() {{
             put("id", "12");
         }};
 
-        assertEquals("DELETE FROM table WHERE id = '12'",deleteCommand.createCommand(simpleParameters));
+        assertEquals("DELETE FROM table WHERE id = 12",deleteCommand.createCommand(simpleParameters));
 
     }
 }

@@ -22,14 +22,14 @@ public class InsertCommand {
                 commandBuilder.append(") ");
             }
         }
-        commandBuilder.append("VALUES ('");
+        commandBuilder.append("VALUES (");
         Iterator<String> valuesIterator = parameters.values().iterator();
         while (valuesIterator.hasNext()) {
             commandBuilder.append(valuesIterator.next());
             if (valuesIterator.hasNext()) {
-                commandBuilder.append("', '");
+                commandBuilder.append(", ");
             } else {
-                commandBuilder.append("');");
+                commandBuilder.append(");");
             }
         }
         return commandBuilder.toString();
