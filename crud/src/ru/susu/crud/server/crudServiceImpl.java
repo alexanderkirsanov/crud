@@ -3,6 +3,11 @@ package ru.susu.crud.server;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import ru.susu.crud.client.crudService;
 import ru.susu.crud.components.EntityFinder;
+import ru.susu.crud.database.ConnectionProperties;
+import ru.susu.crud.database.DatasetFactory;
+import ru.susu.crud.database.connection.ConnectionManager;
+import ru.susu.crud.database.dataset.Dataset;
+import ru.susu.crud.database.dataset.Field;
 import ru.susu.crud.xml.Column;
 import ru.susu.crud.xml.TableDefinition;
 import ru.susu.crud.xml.XMLReader;
@@ -15,18 +20,14 @@ import java.util.Map;
 public class crudServiceImpl extends RemoteServiceServlet implements crudService {
     EntityFinder finder = new EntityFinder();
     private ArrayList<String> sourceForView;
-    private String tableName;
+    private String tableName = "students";
     private Map<String, TableDefinition> tableDefinitionMap = new HashMap<String, TableDefinition>();
+    private Dataset dataset;
+    private List<Field> fields;
+    private Map<String, String[]> mapOfData = new HashMap<String, String[]>();
 
     public crudServiceImpl(){
-        sourceForView = new ArrayList<String>();
-        sourceForView.add("13456");
-        sourceForView.add("aaaabbbb");
-        sourceForView.add("33333");
-        sourceForView.add("xfdg");
-        sourceForView.add("asderx");
-        sourceForView.add("444443");
-        this.finder.setSource(sourceForView);
+
     }
 
     // Implementation of sample interface method
@@ -36,18 +37,35 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
 
     @Override
     public List<String> getTables() {
-        List<String> tables = prepareTableDefinitionMap();
+        prepareDataset();
+        //XMLReader xmlReader = new XMLReader("table.xml");
+        List<String> tables = new ArrayList<String>();
+        //tableDefinitionMap = xmlReader.getTables();
         for (String table : tableDefinitionMap.keySet()) {
             tables.add(table);
         }
         return tables;
     }
 
-    private List<String> prepareTableDefinitionMap() {
+    private void prepareDataset() {
+        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
+        ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         XMLReader xmlReader = new XMLReader("table.xml");
-        List<String> tables = new ArrayList<String>();
         tableDefinitionMap = xmlReader.getTables();
-        return tables;
+        DatasetFactory datasetFactory = null;
+        try {
+            datasetFactory = new DatasetFactory(xmlReader.getTables(), connectionManager);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.dataset = datasetFactory.getDataset(this.tableName);
+        this.fields = datasetFactory.getFields(this.tableName);
+
+        int i = 0;
+        for (Field f : this.fields) {
+            this.mapOfData.put(f.getName(), this.dataset.getLine(i));
+            i++;
+        }
     }
 
     @Override
@@ -69,23 +87,9 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     }
 
     @Override
-    public ArrayList<String> find(String s) {
-        return this.finder.find(s);
-    }
-
-    @Override
-    public ArrayList<String> getStrings() {
-        return this.sourceForView;
-    }
-
-    @Override
-    public List<String> getHeaders(String tableName) {
-        this.tableName = tableName;
-        List<String> result = new ArrayList<String>();
-        this.prepareTableDefinitionMap();
-        for (Column c : this.tableDefinitionMap.get(this.tableName).getColumns()) {
-            result.add(c.getName());
-        }
-        return result;
+    public Map<String, String[]> getData(String tableName) {
+        //this.tableName = tableName;
+        prepareDataset();
+        return this.mapOfData;
     }
 }

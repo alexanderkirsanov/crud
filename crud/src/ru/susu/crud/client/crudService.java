@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,11 +18,7 @@ public interface crudService extends RemoteService {
 
     Map<String, String> update();
 
-    ArrayList<String> find(String s);
-
-    ArrayList<String> getStrings();
-
-    List<String> getHeaders(String s);
+    Map<String, String[]> getData(String s);
 
 
     /**

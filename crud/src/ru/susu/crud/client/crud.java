@@ -5,11 +5,13 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
@@ -58,7 +60,7 @@ public class crud implements EntryPoint {
         insertButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
-                crudService.App.getInstance().find(insertTextBox.getText(), new FindAsyncCallBack(table));
+                //crudService.App.getInstance().find(insertTextBox.getText(), new FindAsyncCallBack(table));
             }
         });
 
@@ -78,7 +80,7 @@ public class crud implements EntryPoint {
                     insertButton.addClickHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent clickEvent) {
-                            crudService.App.getInstance().find(insertTextBox.getText(), new FindAsyncCallBack(table));
+                            //crudService.App.getInstance().find(insertTextBox.getText(), new FindAsyncCallBack(table));
                         }
                     });
                 }
@@ -101,20 +103,31 @@ public class crud implements EntryPoint {
             }
         });
 
-        tablesComboBox.addChangeHandler(new ChangeHandler() {
+        /*tablesComboBox.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent changeEvent) {
-                crudService.App.getInstance().getHeaders(tablesComboBox.getItemText(tablesComboBox.getSelectedIndex()), new ViewHeadersAsyncCallBack(table));
+                try {
+                    crudService.App.getInstance().getData(tablesComboBox.getItemText(tablesComboBox.getSelectedIndex()), new ViewDataAsyncCallBack(table));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        });*/
 
         //crudService.App.getInstance().getStrings(new ViewAsyncCallback(table));
 
-        List<String> tables = new ArrayList<String>();
-        crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
-        crudService.App.getInstance().setTable("students", new VoidAsyncCallback());
+       //try {
+            crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
+        //crudService.App.getInstance().setTable("students", new VoidAsyncCallback());
         currentTable = "students";
-        crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
+        //try {
+        crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
+        //} catch (Exception e) {
+          //  e.printStackTrace();
+        //}
 
         table.setBorderWidth(1);
 
@@ -237,6 +250,7 @@ public class crud implements EntryPoint {
 
         @Override
         public void onFailure(Throwable throwable) {
+            //Window.alert("!!!");
         }
 
         @Override
@@ -249,10 +263,10 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewHeadersAsyncCallBack implements AsyncCallback<List<String>> {
+    private class ViewDataAsyncCallBack implements AsyncCallback<Map<String, String[]>> {
         private FlexTable table;
 
-        public ViewHeadersAsyncCallBack(FlexTable table) {
+        public ViewDataAsyncCallBack(FlexTable table) {
             this.table = table;
         }
 
@@ -262,13 +276,19 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(List<String> result) {
-            table.removeAllRows();
-            int i = 0;
-            for (String s : result) {
-                this.table.setText(0, i, s);
-                i++;
-            }
+        public void onSuccess(Map<String, String[]> result) {
+            Window.alert(result.toString());
+            /*table.removeAllRows();
+            int column = 0;
+            for (String header : result.keySet()) {
+                int row = 0;
+                table.setText(row,column,header);
+                row++;
+                for (String s : result.get(header)){
+                    table.setText(row,column,s);
+                    row++;
+                }
+            } */
         }
     }
 }

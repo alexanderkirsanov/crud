@@ -21,7 +21,7 @@ public class DatasetFactoryTest {
 
     @Test
     public void getDatasetFactory() throws Exception {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "lqip32", "4f3v6", 3306);
+        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         statement = connectionManager.getConnection().createStatement();
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS test(id INTEGER, "
@@ -48,7 +48,7 @@ public class DatasetFactoryTest {
 
     @After
     public void tearDown() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "lqip32", "4f3v6", 3306);
+        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         statement = connectionManager.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS test;");
