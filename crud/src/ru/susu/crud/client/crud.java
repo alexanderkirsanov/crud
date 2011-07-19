@@ -278,17 +278,17 @@ public class crud implements EntryPoint {
         @Override
         public void onSuccess(Map<String, String[]> result) {
             Window.alert(result.toString());
-            /*table.removeAllRows();
+            table.removeAllRows();
             int column = 0;
             for (String header : result.keySet()) {
                 int row = 0;
                 table.setText(row,column,header);
-                row++;
+                column++;
                 for (String s : result.get(header)){
                     table.setText(row,column,s);
                     row++;
                 }
-            } */
+            }
         }
     }
 }

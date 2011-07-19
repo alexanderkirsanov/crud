@@ -26,7 +26,7 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     private List<Field> fields;
     private Map<String, String[]> mapOfData = new HashMap<String, String[]>();
 
-    public crudServiceImpl(){
+    public crudServiceImpl() {
 
     }
 
@@ -37,7 +37,11 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
 
     @Override
     public List<String> getTables() {
-        prepareDataset();
+        try {
+            prepareDataset();
+        } catch (Exception e) {
+
+        }
         //XMLReader xmlReader = new XMLReader("table.xml");
         List<String> tables = new ArrayList<String>();
         //tableDefinitionMap = xmlReader.getTables();
@@ -47,8 +51,8 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         return tables;
     }
 
-    private void prepareDataset() {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
+    private void prepareDataset() throws Exception {
+        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "lqip32", "4f3v6", 3306);
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         XMLReader xmlReader = new XMLReader("table.xml");
         tableDefinitionMap = xmlReader.getTables();
@@ -60,7 +64,12 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         }
         this.dataset = datasetFactory.getDataset(this.tableName);
         this.fields = datasetFactory.getFields(this.tableName);
-
+        this.dataset.selectData();
+        if (this.dataset.getRowCount() == 0) {
+        for (Field f : this.fields)
+            this.mapOfData.put(f.getName(), new String[0]);
+            return;
+        }
         int i = 0;
         for (Field f : this.fields) {
             this.mapOfData.put(f.getName(), this.dataset.getLine(i));
@@ -89,7 +98,11 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     @Override
     public Map<String, String[]> getData(String tableName) {
         //this.tableName = tableName;
-        prepareDataset();
+        try {
+            prepareDataset();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         return this.mapOfData;
     }
 }
