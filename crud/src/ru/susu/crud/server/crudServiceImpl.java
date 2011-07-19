@@ -12,10 +12,7 @@ import ru.susu.crud.xml.Column;
 import ru.susu.crud.xml.TableDefinition;
 import ru.susu.crud.xml.XMLReader;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class crudServiceImpl extends RemoteServiceServlet implements crudService {
     EntityFinder finder = new EntityFinder();
@@ -66,8 +63,8 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         this.fields = datasetFactory.getFields(this.tableName);
         this.dataset.selectData();
         if (this.dataset.getRowCount() == 0) {
-        for (Field f : this.fields)
-            this.mapOfData.put(f.getName(), new String[0]);
+            for (Field f : this.fields)
+                this.mapOfData.put(f.getName(), new String[0]);
             return;
         }
         int i = 0;
@@ -104,5 +101,23 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return this.mapOfData;
+    }
+
+    @Override
+    public String[] getHeader() {
+        if (this.fields.size() == 0) {
+            try {
+                prepareDataset();
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+        String[] result = new String[fields.size()];
+        int i = 0;
+        for (Field field : fields) {
+            result[i] = field.getName();
+            i++;
+        }
+        return result;
     }
 }

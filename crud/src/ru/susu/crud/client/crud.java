@@ -87,9 +87,12 @@ public class crud implements EntryPoint {
                 if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(ADD_ITEM)) {
                     final Label insertLabel = new Label("Строка");
                     final TextBox insertTextBox = new TextBox();
+                    final FlexTable flexTable = new FlexTable();
+
                     Button addButton = new Button("Добавить");
                     insertPanel.add(insertLabel);
-                    insertPanel.add(insertTextBox);
+                    crudService.App.getInstance().getHeader(new ViewFieldAsyncCallBack(flexTable));
+                    insertPanel.add(flexTable);
                     insertPanel.add(addButton);
                 }
                 if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(UPDATE_ITEM)) {
@@ -116,8 +119,8 @@ public class crud implements EntryPoint {
 
         //crudService.App.getInstance().getStrings(new ViewAsyncCallback(table));
 
-       //try {
-            crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
+        //try {
+        crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
         //} catch (Exception e) {
         //    e.printStackTrace();
         //}
@@ -126,7 +129,7 @@ public class crud implements EntryPoint {
         //try {
         crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
         //} catch (Exception e) {
-          //  e.printStackTrace();
+        //  e.printStackTrace();
         //}
 
         table.setBorderWidth(1);
@@ -282,13 +285,39 @@ public class crud implements EntryPoint {
             int column = 0;
             for (String header : result.keySet()) {
                 int row = 0;
-                table.setText(row,column,header);
+                table.setText(row, column, header);
                 column++;
-                for (String s : result.get(header)){
-                    table.setText(row,column,s);
+                for (String s : result.get(header)) {
+                    table.setText(row, column, s);
                     row++;
                 }
             }
         }
     }
+
+    private class ViewFieldAsyncCallBack implements AsyncCallback<String[]> {
+        private HTMLTable table;
+
+        public ViewFieldAsyncCallBack(HTMLTable table) {
+            this.table = table;
+        }
+
+        @Override
+        public void onFailure(Throwable throwable) {
+
+        }
+
+        @Override
+        public void onSuccess(String[] result) {
+            table.clear();
+            int column = 0;
+            for (String header : result) {
+
+                table.setText(0, column, header);
+                table.setWidget(1, column, new TextBox());
+                column++;
+            }
+        }
+    }
+
 }

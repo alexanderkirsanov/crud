@@ -20,6 +20,8 @@ public interface crudService extends RemoteService {
 
     Map<String, String[]> getData(String s);
 
+    String[] getHeader();
+
 
     /**
      * Utility/Convenience class.
