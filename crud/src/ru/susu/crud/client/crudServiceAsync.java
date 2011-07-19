@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface crudServiceAsync {
-    void getMessage(String msg, AsyncCallback<String> async);
 
     void getTables(AsyncCallback<List<String>> async);
 

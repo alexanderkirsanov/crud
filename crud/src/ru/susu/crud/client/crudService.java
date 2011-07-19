@@ -10,8 +10,6 @@ import java.util.Map;
 @RemoteServiceRelativePath("crudService")
 public interface crudService extends RemoteService {
 
-    String getMessage(String msg);
-
     List<String> getTables();
 
     void setTable(String tableName);

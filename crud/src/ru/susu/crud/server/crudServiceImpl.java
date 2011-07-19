@@ -3,33 +3,30 @@ package ru.susu.crud.server;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import ru.susu.crud.client.crudService;
 import ru.susu.crud.components.EntityFinder;
-import ru.susu.crud.database.ConnectionProperties;
-import ru.susu.crud.database.DatasetFactory;
+import ru.susu.crud.configurator.Configurator;
+import ru.susu.crud.configurator.IConfigurable;
+import ru.susu.crud.database.DatasetRepository;
 import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.Dataset;
 import ru.susu.crud.database.dataset.Field;
-import ru.susu.crud.xml.Column;
-import ru.susu.crud.xml.TableDefinition;
-import ru.susu.crud.xml.XMLReader;
 
 import java.util.*;
 
-public class crudServiceImpl extends RemoteServiceServlet implements crudService {
+public class crudServiceImpl extends RemoteServiceServlet implements crudService, IConfigurable {
     EntityFinder finder = new EntityFinder();
     private ArrayList<String> sourceForView;
     private String tableName;
-    private Map<String, TableDefinition> tableDefinitionMap = new HashMap<String, TableDefinition>();
     private Dataset dataset;
     private List<Field> fields;
     private Map<String, String[]> mapOfData = new HashMap<String, String[]>();
+    private ConnectionManager connectionManager;
 
     public crudServiceImpl() {
-
-    }
-
-    // Implementation of sample interface method
-    public String getMessage(String msg) {
-        return "Client said: \"" + msg + "\"<br>Server answered: \"Hi!\"";
+        try {
+            new Configurator(this);
+        } catch (Exception e) {
+            System.out.println("die");
+        }
     }
 
     @Override
@@ -40,25 +37,16 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
 
         }
         List<String> tables = new ArrayList<String>();
-        for (String table : tableDefinitionMap.keySet()) {
+        for (String table : DatasetRepository.getInstance().getTables()) {
             tables.add(table);
         }
         return tables;
     }
 
     private void prepareDataset() throws Exception {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
-        ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
-        XMLReader xmlReader = new XMLReader("table.xml");
-        tableDefinitionMap = xmlReader.getTables();
-        DatasetFactory datasetFactory = null;
-        try {
-            datasetFactory = new DatasetFactory(xmlReader.getTables(), connectionManager);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.dataset = datasetFactory.getDataset(this.tableName);
-        this.fields = datasetFactory.getFields(this.tableName);
+
+        this.dataset = DatasetRepository.getInstance().getDataset(this.tableName);
+        this.fields = DatasetRepository.getInstance().getFields(this.tableName);
         this.dataset.selectData();
     }
 
@@ -70,10 +58,9 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     @Override
     public Map<String, String> update() {
         Map<String, String> mapOfString = new HashMap<String, String>();
-        if (tableDefinitionMap != null && tableName != null) {
-            TableDefinition tableDefinition = tableDefinitionMap.get(tableName);
-            for (Column column : tableDefinition.getColumns()) {
-                mapOfString.put(column.getName(), "");
+        if (tableName != null) {
+            for (Field field : DatasetRepository.getInstance().getFields(tableName)) {
+                mapOfString.put(field.getName(), "");
             }
         }
         return mapOfString;
@@ -146,6 +133,21 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
             this.dataset.insertData(mapOfValues);
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    @Override
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+    }
+
+    @Override
+    public void addFields(String table, List<Field> fields) {
+        Dataset dataset = new Dataset(fields, connectionManager);
+        try {
+            DatasetRepository.getInstance().add(table, dataset, fields);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
