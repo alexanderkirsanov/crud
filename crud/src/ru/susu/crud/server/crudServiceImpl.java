@@ -12,21 +12,18 @@ import ru.susu.crud.xml.Column;
 import ru.susu.crud.xml.TableDefinition;
 import ru.susu.crud.xml.XMLReader;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class crudServiceImpl extends RemoteServiceServlet implements crudService {
     EntityFinder finder = new EntityFinder();
     private ArrayList<String> sourceForView;
-    private String tableName = "students";
+    private String tableName;
     private Map<String, TableDefinition> tableDefinitionMap = new HashMap<String, TableDefinition>();
     private Dataset dataset;
     private List<Field> fields;
     private Map<String, String[]> mapOfData = new HashMap<String, String[]>();
 
-    public crudServiceImpl(){
+    public crudServiceImpl() {
 
     }
 
@@ -37,7 +34,11 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
 
     @Override
     public List<String> getTables() {
-        prepareDataset();
+        try {
+            prepareDataset();
+        } catch (Exception e) {
+
+        }
         //XMLReader xmlReader = new XMLReader("table.xml");
         List<String> tables = new ArrayList<String>();
         //tableDefinitionMap = xmlReader.getTables();
@@ -47,7 +48,7 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         return tables;
     }
 
-    private void prepareDataset() {
+    private void prepareDataset() throws Exception {
         ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         XMLReader xmlReader = new XMLReader("table.xml");
@@ -60,12 +61,23 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         }
         this.dataset = datasetFactory.getDataset(this.tableName);
         this.fields = datasetFactory.getFields(this.tableName);
-
+        this.dataset.selectData();
+        /*if (this.dataset.getRowCount() == 0) {
+            for (Field f : this.fields)
+                this.mapOfData.put(f.getName(), new String[0]);
+            return;
+        }
         int i = 0;
         for (Field f : this.fields) {
-            this.mapOfData.put(f.getName(), this.dataset.getLine(i));
+            int j = 0;
+            String[] strings = new String[100];
+            while (j < this.dataset.getRowCount()) {
+                strings[j] = this.dataset.getLine(j)[i];
+                j++;
+            }
             i++;
-        }
+            this.mapOfData.put(f.getName(), strings);
+        }   */
     }
 
     @Override
@@ -87,12 +99,41 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     }
 
     @Override
-    public Map<String, String[]> getData(String tableName) {
-        //this.tableName = tableName;
-        prepareDataset();
-        //return this.mapOfData;
-        Map<String, String[]> res = new HashMap<String, String[]>();
-        res.put(this.fields.toString(), new String[]{"1"});
-        return res;
+    public List<String[]> getData(String tableName) {
+        this.tableName = tableName;
+        List<String[]> result = new LinkedList<String[]>();
+        try {
+            prepareDataset();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        for (int i = 0; i < this.dataset.getRowCount(); i++) {
+            result.add(i, this.dataset.getLine(i));
+        }
+        return result;
+    }
+
+    @Override
+    public String[] getHeaders(String tableName) {
+        this.tableName = tableName;
+        /*if (this.fields.size() == 0) {
+            try {
+                prepareDataset();
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }  */
+        try {
+            prepareDataset();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        String[] result = new String[fields.size()];
+        int i = 0;
+        for (Field field : fields) {
+            result[i] = field.getName();
+            i++;
+        }
+        return result;
     }
 }

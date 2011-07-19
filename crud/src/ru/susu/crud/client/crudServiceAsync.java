@@ -14,5 +14,7 @@ public interface crudServiceAsync {
 
     void update(AsyncCallback<Map<String, String>> async);
 
-    void getData(String s, AsyncCallback<Map<String, String[]>> async);
+    void getData(String s, AsyncCallback<List<String[]>> async);
+
+    void getHeaders(String tableName, AsyncCallback<String[]> async);
 }

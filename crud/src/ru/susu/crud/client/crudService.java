@@ -18,7 +18,9 @@ public interface crudService extends RemoteService {
 
     Map<String, String> update();
 
-    Map<String, String[]> getData(String s);
+    List<String[]> getData(String s);
+
+    String[] getHeaders(String tableName);
 
 
     /**

@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
@@ -87,9 +86,12 @@ public class crud implements EntryPoint {
                 if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(ADD_ITEM)) {
                     final Label insertLabel = new Label("Строка");
                     final TextBox insertTextBox = new TextBox();
+                    final FlexTable flexTable = new FlexTable();
+
                     Button addButton = new Button("Добавить");
                     insertPanel.add(insertLabel);
-                    insertPanel.add(insertTextBox);
+                    crudService.App.getInstance().getHeaders(currentTable, new ViewFieldAsyncCallBack(flexTable));
+                    insertPanel.add(flexTable);
                     insertPanel.add(addButton);
                 }
                 if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(UPDATE_ITEM)) {
@@ -103,30 +105,32 @@ public class crud implements EntryPoint {
             }
         });
 
-        /*tablesComboBox.addChangeHandler(new ChangeHandler() {
+        tablesComboBox.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent changeEvent) {
                 try {
+                    crudService.App.getInstance().getHeaders(tablesComboBox.getItemText(tablesComboBox.getSelectedIndex()), new ViewHeadersAsyncCallBack(table));
                     crudService.App.getInstance().getData(tablesComboBox.getItemText(tablesComboBox.getSelectedIndex()), new ViewDataAsyncCallBack(table));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        });*/
+        });
 
         //crudService.App.getInstance().getStrings(new ViewAsyncCallback(table));
 
-       //try {
-            crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
+        //try {
+        crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
         //} catch (Exception e) {
         //    e.printStackTrace();
         //}
         //crudService.App.getInstance().setTable("students", new VoidAsyncCallback());
         currentTable = "students";
         //try {
-        crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
+        crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
+        //crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
         //} catch (Exception e) {
-          //  e.printStackTrace();
+        //  e.printStackTrace();
         //}
 
         table.setBorderWidth(1);
@@ -215,10 +219,35 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewDataAsyncCallBack implements AsyncCallback<Map<String, String[]>> {
+    private class ViewDataAsyncCallBack implements AsyncCallback<List<String[]>> {
         private FlexTable table;
 
         public ViewDataAsyncCallBack(FlexTable table) {
+            this.table = table;
+        }
+
+        @Override
+        public void onFailure(Throwable throwable) {
+            Window.alert("!");
+        }
+
+        @Override
+        public void onSuccess(List<String[]> result) {
+            int i = 0;
+            while (i < result.size()){
+                String[] line = result.get(i);
+                for (int j = 0; j < line.length; j++){
+                    this.table.setText(i+2,j,line[j]);
+                }
+                i++;
+            }
+        }
+    }
+
+    private class ViewFieldAsyncCallBack implements AsyncCallback<String[]> {
+        private HTMLTable table;
+
+        public ViewFieldAsyncCallBack(HTMLTable table) {
             this.table = table;
         }
 
@@ -228,19 +257,38 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(Map<String, String[]> result) {
-            Window.alert(result.toString());
-            /*table.removeAllRows();
+        public void onSuccess(String[] result) {
+            table.clear();
             int column = 0;
-            for (String header : result.keySet()) {
-                int row = 0;
-                table.setText(row,column,header);
-                row++;
-                for (String s : result.get(header)){
-                    table.setText(row,column,s);
-                    row++;
-                }
-            } */
+            for (String header : result) {
+
+                table.setText(0, column, header);
+                table.setWidget(1, column, new TextBox());
+                column++;
+            }
+        }
+    }
+
+    private class ViewHeadersAsyncCallBack implements AsyncCallback<String[]> {
+        private FlexTable table;
+
+        public ViewHeadersAsyncCallBack(FlexTable table) {
+            this.table = table;
+        }
+
+        @Override
+        public void onFailure(Throwable throwable) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public void onSuccess(String[] result) {
+            table.removeAllRows();
+            int column = 0;
+            for (String s : result) {
+                this.table.setText(0,column,s);
+                column++;
+            }
         }
     }
 }
