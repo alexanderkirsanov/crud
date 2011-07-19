@@ -75,8 +75,8 @@ public class Dataset {
     public String[] getLine(int linePosition) {
         String[] line = new String[mapOfData.size()];
         int i = 0;
-        for (List<String> value : mapOfData.values()) {
-            line[i] = value.get(linePosition);
+        for (Field field : listOfField) {
+            line[i] = mapOfData.get(field.getName()).get(linePosition);
             i++;
         }
         return line;
