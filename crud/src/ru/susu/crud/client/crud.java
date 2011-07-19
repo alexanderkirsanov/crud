@@ -125,10 +125,10 @@ public class crud implements EntryPoint {
         //    e.printStackTrace();
         //}
         //crudService.App.getInstance().setTable("students", new VoidAsyncCallback());
-        currentTable = "students";
+        currentTable = "test";
         //try {
         crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
-        //crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
+        crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
         //} catch (Exception e) {
         //  e.printStackTrace();
         //}
@@ -234,8 +234,7 @@ public class crud implements EntryPoint {
         @Override
         public void onSuccess(List<String[]> result) {
             int i = 0;
-            while (i < result.size()){
-                String[] line = result.get(i);
+            for (String[] line : result){
                 for (int j = 0; j < line.length; j++){
                     this.table.setText(i+2,j,line[j]);
                 }
