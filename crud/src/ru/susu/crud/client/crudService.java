@@ -22,6 +22,10 @@ public interface crudService extends RemoteService {
 
     String[] getHeaders(String tableName);
 
+    List<String> getFieldsForInsert(String currentTable);
+
+    void insertData(String[] lines);
+
 
     /**
      * Utility/Convenience class.

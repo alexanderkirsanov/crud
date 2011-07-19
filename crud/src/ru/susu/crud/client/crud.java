@@ -16,21 +16,25 @@ import java.util.List;
  * Entry point classes define <code>onModuleLoad()</code>
  */
 public class crud implements EntryPoint {
-    public static final String FIND_ITEM = "Поиск";
-    public static final String ADD_ITEM = "Добавление";
-    public static final String UPDATE_ITEM = "Редактирование";
-
     private VerticalPanel chooseTablePanel = new VerticalPanel();
     private Label chooseTableLabel = new Label("Choose the table");
     private ListBox tablesComboBox = new ListBox(false);
     private String currentTable;
 
     private VerticalPanel subMainPanel = new VerticalPanel();
-    private HorizontalPanel comboBoxPanel = new HorizontalPanel();
-    private Label comboBoxLabel = new Label();
-    private ListBox comboBox = new ListBox(false);
-    private HorizontalPanel insertPanel = new HorizontalPanel();
+    private Label tableHeader = new Label();
     private final FlexTable table = new FlexTable();
+    private Button addButton = new Button("Add");
+
+    public String getTableHeaderText() {
+        return tableHeader.getText();
+    }
+
+    public void setTableHeaderText(String text) {
+        this.tableHeader.setText(text);
+    }
+
+
 
     /**
      * This is the entry point method.
@@ -40,107 +44,64 @@ public class crud implements EntryPoint {
         chooseTablePanel.add(chooseTableLabel);
         chooseTablePanel.add(tablesComboBox);
 
-        comboBoxLabel.setText("Действие");
-        comboBox.addItem(FIND_ITEM);
-        comboBox.addItem(ADD_ITEM);
-        comboBox.addItem(UPDATE_ITEM);
-        comboBoxPanel.add(comboBoxLabel);
-        comboBoxPanel.add(comboBox);
-
-        //отрефакторить это ужасное дублирование
-        Label insertLabel = new Label("Символы");
-        final TextBox insertTextBox = new TextBox();
-        Button insertButton = new Button("Поиск");
-
-        insertPanel.add(insertLabel);
-        insertPanel.add(insertTextBox);
-        insertPanel.add(insertButton);
-
-        insertButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                //crudService.App.getInstance().find(insertTextBox.getText(), new FindAsyncCallBack(table));
-            }
-        });
-
-        comboBox.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent changeEvent) {
-                insertPanel.clear();
-                if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(FIND_ITEM)) {
-                    Label insertLabel = new Label("Символы");
-                    final TextBox insertTextBox = new TextBox();
-                    Button insertButton = new Button("Поиск");
-
-                    insertPanel.add(insertLabel);
-                    insertPanel.add(insertTextBox);
-                    insertPanel.add(insertButton);
-
-                    insertButton.addClickHandler(new ClickHandler() {
-                        @Override
-                        public void onClick(ClickEvent clickEvent) {
-                            //crudService.App.getInstance().find(insertTextBox.getText(), new FindAsyncCallBack(table));
-                        }
-                    });
-                }
-                if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(ADD_ITEM)) {
-                    final Label insertLabel = new Label("Строка");
-                    final TextBox insertTextBox = new TextBox();
-                    final FlexTable flexTable = new FlexTable();
-
-                    Button addButton = new Button("Добавить");
-                    insertPanel.add(insertLabel);
-                    crudService.App.getInstance().getHeaders(currentTable, new ViewFieldAsyncCallBack(flexTable));
-                    insertPanel.add(flexTable);
-                    insertPanel.add(addButton);
-                }
-                if (comboBox.getItemText(comboBox.getSelectedIndex()).equals(UPDATE_ITEM)) {
-                    final Label insertLabel = new Label("Изменение");
-                    final TextBox insertTextBox = new TextBox();
-                    Button updateButton = new Button("Изменить");
-                    insertPanel.add(insertLabel);
-                    insertPanel.add(insertTextBox);
-                    insertPanel.add(updateButton);
-                }
-            }
-        });
-
         tablesComboBox.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent changeEvent) {
+                currentTable = tablesComboBox.getItemText(tablesComboBox.getSelectedIndex());
                 try {
-                    crudService.App.getInstance().getHeaders(tablesComboBox.getItemText(tablesComboBox.getSelectedIndex()), new ViewHeadersAsyncCallBack(table));
-                    crudService.App.getInstance().getData(tablesComboBox.getItemText(tablesComboBox.getSelectedIndex()), new ViewDataAsyncCallBack(table));
+                    crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
+                    crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        //crudService.App.getInstance().getStrings(new ViewAsyncCallback(table));
+        addButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                subMainPanel.clear();
+                setTableHeaderText("Add the entry");
+                crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(table));
+                Button insertButton = new Button("Add to table");
 
-        //try {
+                insertButton.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent clickEvent) {
+                        String[] lines = new String[table.getRowCount()];
+                        for (int i = 0; i < table.getRowCount(); i++){
+                            lines[i] = ((TextBox)table.getWidget(i, 1)).getText();
+                        }
+                        crudService.App.getInstance().insertData(lines, new VoidAsyncCallback());
+                        baseView();
+                    }
+                });
+
+                subMainPanel.add(tableHeader);
+                subMainPanel.add(table);
+                subMainPanel.add(insertButton);
+            }
+        });
+
         crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
-        //} catch (Exception e) {
-        //    e.printStackTrace();
-        //}
-        //crudService.App.getInstance().setTable("students", new VoidAsyncCallback());
         currentTable = "test";
-        //try {
-        crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
-        crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
-        //} catch (Exception e) {
-        //  e.printStackTrace();
-        //}
 
-        table.setBorderWidth(1);
-
-        subMainPanel.add(comboBoxPanel);
-        subMainPanel.add(insertPanel);
-        subMainPanel.add(table);
+        baseView();
 
         RootPanel.get("root").add(subMainPanel);
         RootPanel.get("tables_list").add(chooseTablePanel);
+    }
+
+    private void baseView() {
+        subMainPanel.clear();
+
+        crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
+        crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
+        table.setBorderWidth(1);
+
+        subMainPanel.add(tableHeader);
+        subMainPanel.add(table);
+        subMainPanel.add(addButton);
     }
 
 
@@ -243,10 +204,10 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewFieldAsyncCallBack implements AsyncCallback<String[]> {
-        private HTMLTable table;
+    private class ViewFieldAsyncCallBack implements AsyncCallback<List<String>> {
+        private FlexTable table;
 
-        public ViewFieldAsyncCallBack(HTMLTable table) {
+        public ViewFieldAsyncCallBack(FlexTable table) {
             this.table = table;
         }
 
@@ -256,14 +217,13 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(String[] result) {
-            table.clear();
-            int column = 0;
+        public void onSuccess(List<String> result) {
+            table.removeAllRows();
+            int row = 0;
             for (String header : result) {
-
-                table.setText(0, column, header);
-                table.setWidget(1, column, new TextBox());
-                column++;
+                table.setText(row, 0, header);
+                table.setWidget(row, 1, new TextBox());
+                row++;
             }
         }
     }
@@ -282,6 +242,7 @@ public class crud implements EntryPoint {
 
         @Override
         public void onSuccess(String[] result) {
+            setTableHeaderText(currentTable.toUpperCase());
             table.removeAllRows();
             int column = 0;
             for (String s : result) {

@@ -17,4 +17,8 @@ public interface crudServiceAsync {
     void getData(String s, AsyncCallback<List<String[]>> async);
 
     void getHeaders(String tableName, AsyncCallback<String[]> async);
+
+    void getFieldsForInsert(String currentTable, AsyncCallback<List<String>> async);
+
+    void insertData(String[] lines, AsyncCallback<Void> async);
 }

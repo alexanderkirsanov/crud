@@ -39,9 +39,7 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         } catch (Exception e) {
 
         }
-        //XMLReader xmlReader = new XMLReader("table.xml");
         List<String> tables = new ArrayList<String>();
-        //tableDefinitionMap = xmlReader.getTables();
         for (String table : tableDefinitionMap.keySet()) {
             tables.add(table);
         }
@@ -62,22 +60,6 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
         this.dataset = datasetFactory.getDataset(this.tableName);
         this.fields = datasetFactory.getFields(this.tableName);
         this.dataset.selectData();
-        /*if (this.dataset.getRowCount() == 0) {
-            for (Field f : this.fields)
-                this.mapOfData.put(f.getName(), new String[0]);
-            return;
-        }
-        int i = 0;
-        for (Field f : this.fields) {
-            int j = 0;
-            String[] strings = new String[100];
-            while (j < this.dataset.getRowCount()) {
-                strings[j] = this.dataset.getLine(j)[i];
-                j++;
-            }
-            i++;
-            this.mapOfData.put(f.getName(), strings);
-        }   */
     }
 
     @Override
@@ -135,5 +117,35 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
             i++;
         }
         return result;
+    }
+
+    @Override
+    public List<String> getFieldsForInsert(String currentTable) {
+        this.tableName = currentTable;
+        List<String> result = new LinkedList<String>();
+        for (Field field : this.fields) {
+            result.add(field.getName());
+        }
+        return result;
+    }
+
+    @Override
+    public void insertData(String[] lines) {
+        try {
+            prepareDataset();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Map<Field, String> mapOfValues = new HashMap<Field, String>();
+        int i = 0;
+        for (Field field : this.fields) {
+            mapOfValues.put(field, lines[i]);
+            i++;
+        }
+        try {
+            this.dataset.insertData(mapOfValues);
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 }
