@@ -137,34 +137,6 @@ public class crud implements EntryPoint {
 
         RootPanel.get("root").add(subMainPanel);
         RootPanel.get("tables_list").add(chooseTablePanel);
-
-        /*crudService.App.getInstance().getTables(new AsyncCallback<List<String>>() {
-            @Override
-            public void onFailure(Throwable caught) {
-
-            }
-
-            @Override
-            public void onSuccess(List<String> result) {
-                for (final String s : result) {
-                    Label label = new Label(s);
-
-                    label.addClickHandler(new ClickHandler() {
-                        @Override
-                        public void onClick(ClickEvent event) {
-                            crudService.App.getInstance().setTable(s, new VoidAsyncCallback());
-                            crudService.App.getInstance().update(new GridAsyncCallback(gridPanel));
-                        }
-                    });
-                    pagePanel.add(label);
-                }
-            }
-        });
-
-
-        RootPanel.get("page_navigator").add(pagePanel);
-        RootPanel.get("grid").add(gridPanel);
-        // RootPanel.get("slot2").add(label); */
     }
 
 
@@ -178,26 +150,6 @@ public class crud implements EntryPoint {
         public void onSuccess(Void result) {
         }
     }
-
-    /*private static class GridAsyncCallback implements AsyncCallback<Map<String, String>> {
-        private Panel panel;
-
-        public GridAsyncCallback(Panel panel) {
-            this.panel = panel;
-        }
-
-        @Override
-        public void onFailure(Throwable caught) {
-        }
-
-        @Override
-        public void onSuccess(Map<String, String> result) {
-            panel.clear();
-            for (String columnName : result.keySet()) {
-                panel.add(new Label(columnName));
-            }
-        }
-    }    */
 
     private static class FindAsyncCallBack implements AsyncCallback<ArrayList<String>> {
         private FlexTable table;

@@ -90,6 +90,9 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     public Map<String, String[]> getData(String tableName) {
         //this.tableName = tableName;
         prepareDataset();
-        return this.mapOfData;
+        //return this.mapOfData;
+        Map<String, String[]> res = new HashMap<String, String[]>();
+        res.put(this.fields.toString(), new String[]{"1"});
+        return res;
     }
 }
