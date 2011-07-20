@@ -84,7 +84,7 @@ public class CrudServiceManagerTest {
 
     @Test
     public void deleteDataTest() throws Exception {
-         List<Field> fields = new LinkedList<Field>();
+        List<Field> fields = new LinkedList<Field>();
         fields.add(idField);
         fields.add(nameField);
         crudServiceManager.addFields(table, fields);

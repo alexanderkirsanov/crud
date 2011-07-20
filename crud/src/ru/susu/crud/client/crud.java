@@ -94,7 +94,10 @@ public class crud implements EntryPoint {
 
         crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(mainTable));
         crudService.App.getInstance().selectData(currentTable, new ViewDataAsyncCallBack(mainTable));
+
         mainTable.setBorderWidth(1);
+        mainTable.setCellSpacing(0);
+        mainTable.setCellPadding(4);
 
         subMainPanel.add(tableHeader);
         subMainPanel.add(mainTable);
@@ -153,6 +156,8 @@ public class crud implements EntryPoint {
                 for (int j = 0; j < line.length; j++){
                     this.table.setText(i+2,j,line[j]);
                 }
+                this.table.setWidget(i+2,line.length,new Button("Delete"));
+                this.table.setWidget(i+2,line.length+1,new Button("Update"));
                 i++;
             }
         }
