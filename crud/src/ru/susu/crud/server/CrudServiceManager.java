@@ -18,7 +18,7 @@ public class CrudServiceManager implements IPage {
     private Map<String, Map<String, Editor>> editors = new HashMap<String, Map<String, Editor>>();
 
     public List<String> getTables() {
-        prepareDataset();
+//        prepareDataset();
         List<String> tables = new ArrayList<String>();
         for (String table : DatasetRepository.getInstance().getTables()) {
             tables.add(table);
@@ -62,6 +62,7 @@ public class CrudServiceManager implements IPage {
 
     public List<String> getFieldsForInsert(String currentTable) {
         this.tableName = currentTable;
+        prepareDataset();
         List<String> result = new LinkedList<String>();
         for (Field field : this.fields) {
             result.add(field.getName());
