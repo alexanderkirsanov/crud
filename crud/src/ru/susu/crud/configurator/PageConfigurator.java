@@ -23,7 +23,7 @@ public class PageConfigurator {
     }
 
     public void configure() throws Exception {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "lqip32", "4f3v6", 3306);
+        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         XMLReader xmlReader = new XMLReader("table.xml");
         Map<String, TableDefinition> tableDefinitionMap = xmlReader.getTables();

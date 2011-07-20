@@ -9,22 +9,22 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
  */
 public class crud implements EntryPoint {
-    private VerticalPanel chooseTablePanel = new VerticalPanel();
-    private Label chooseTableLabel = new Label("Choose the table");
-    private ListBox tablesComboBox = new ListBox(false);
     private String currentTable;
+
+    private VerticalPanel chooseTablePanel = new VerticalPanel();
+    private Label chooseTableLabel = new Label("Choose the mainTable");
+    private ListBox chooseTableComboBox = new ListBox(false);
 
     private VerticalPanel subMainPanel = new VerticalPanel();
     private Label tableHeader = new Label();
-    private final FlexTable table = new FlexTable();
-    private Button addButton = new Button("Add");
+    private final FlexTable mainTable = new FlexTable();
+    private Button addEntryButton = new Button("Add");
 
     public String getTableHeaderText() {
         return tableHeader.getText();
@@ -35,42 +35,40 @@ public class crud implements EntryPoint {
     }
 
 
-
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
 
         chooseTablePanel.add(chooseTableLabel);
-        chooseTablePanel.add(tablesComboBox);
+        chooseTablePanel.add(chooseTableComboBox);
 
-        tablesComboBox.addChangeHandler(new ChangeHandler() {
+        chooseTableComboBox.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent changeEvent) {
-                currentTable = tablesComboBox.getItemText(tablesComboBox.getSelectedIndex());
+                currentTable = chooseTableComboBox.getItemText(chooseTableComboBox.getSelectedIndex());
                 try {
-                    crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
-                    crudService.App.getInstance().selectData(currentTable, new ViewDataAsyncCallBack(table));
+                    baseView();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        addButton.addClickHandler(new ClickHandler() {
+        addEntryButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
                 subMainPanel.clear();
                 setTableHeaderText("Add the entry");
-                crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(table));
-                Button insertButton = new Button("Add to table");
+                crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
+                Button insertButton = new Button("Add to mainTable");
 
                 insertButton.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent clickEvent) {
-                        String[] lines = new String[table.getRowCount()];
-                        for (int i = 0; i < table.getRowCount(); i++){
-                            lines[i] = ((TextBox)table.getWidget(i, 1)).getText();
+                        String[] lines = new String[mainTable.getRowCount()];
+                        for (int i = 0; i < mainTable.getRowCount(); i++){
+                            lines[i] = ((TextBox) mainTable.getWidget(i, 1)).getText();
                         }
                         crudService.App.getInstance().insertData(currentTable, lines, new VoidAsyncCallback());
                         baseView();
@@ -78,12 +76,12 @@ public class crud implements EntryPoint {
                 });
 
                 subMainPanel.add(tableHeader);
-                subMainPanel.add(table);
+                subMainPanel.add(mainTable);
                 subMainPanel.add(insertButton);
             }
         });
 
-        crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(tablesComboBox));
+        crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(chooseTableComboBox));
         currentTable = "test";
 
         baseView();
@@ -95,13 +93,13 @@ public class crud implements EntryPoint {
     private void baseView() {
         subMainPanel.clear();
 
-        crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
-        crudService.App.getInstance().selectData(currentTable, new ViewDataAsyncCallBack(table));
-        table.setBorderWidth(1);
+        crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(mainTable));
+        crudService.App.getInstance().selectData(currentTable, new ViewDataAsyncCallBack(mainTable));
+        mainTable.setBorderWidth(1);
 
         subMainPanel.add(tableHeader);
-        subMainPanel.add(table);
-        subMainPanel.add(addButton);
+        subMainPanel.add(mainTable);
+        subMainPanel.add(addEntryButton);
     }
 
 
@@ -113,48 +111,6 @@ public class crud implements EntryPoint {
 
         @Override
         public void onSuccess(Void result) {
-        }
-    }
-
-    private static class FindAsyncCallBack implements AsyncCallback<ArrayList<String>> {
-        private FlexTable table;
-
-        public FindAsyncCallBack(FlexTable table) {
-            this.table = table;
-        }
-
-        @Override
-        public void onFailure(Throwable throwable) {
-        }
-
-        @Override
-        public void onSuccess(ArrayList<String> result) {
-            this.table.removeAllRows();
-            int i = 0;
-            for (String s : result) {
-                this.table.setText(i, i, s);
-                i++;
-            }
-        }
-    }
-
-    private static class ViewAsyncCallback implements AsyncCallback<ArrayList<String>> {
-
-        private FlexTable table;
-
-        public ViewAsyncCallback(FlexTable table) {
-            this.table = table;
-        }
-
-        @Override
-        public void onFailure(Throwable caught) {
-        }
-
-        @Override
-        public void onSuccess(ArrayList<String> result) {
-            for (String s : result) {
-                this.table.setText(this.table.getRowCount(), 0, s);
-            }
         }
     }
 
@@ -175,7 +131,6 @@ public class crud implements EntryPoint {
             for (String tab : result) {
                 this.innerViewCombo.addItem(tab);
             }
-            //currentTable = this.innerViewCombo.getItemText(this.innerViewCombo.getSelectedIndex());
             innerViewCombo.setSelectedIndex(-1);
         }
     }
