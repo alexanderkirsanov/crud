@@ -3,7 +3,6 @@ package ru.susu.crud.configurator;
 import ru.susu.crud.database.ConnectionProperties;
 import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.*;
-import ru.susu.crud.server.crudServiceImpl;
 import ru.susu.crud.xml.Column;
 import ru.susu.crud.xml.TableDefinition;
 import ru.susu.crud.xml.XMLReader;
@@ -14,20 +13,24 @@ import java.util.Map;
 
 public class Configurator {
 
-    private IConfigurable servlet;
+    private IPage servlet;
 
-    public Configurator(crudServiceImpl servlet) throws Exception {
+    public Configurator(IPage servlet) {
+        this.servlet = servlet;
+
+    }
+
+    public void configure() throws Exception {
         ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "lqip32", "4f3v6", 3306);
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         XMLReader xmlReader = new XMLReader("table.xml");
         Map<String, TableDefinition> tableDefinitionMap = xmlReader.getTables();
-        this.servlet = servlet;
+
         this.servlet.setConnectionManager(connectionManager);
         for (TableDefinition tableDefinition : tableDefinitionMap.values()) {
             setDatasetFields(tableDefinition.getName(), tableDefinition.getColumns());
             setFieldEditors(tableDefinition.getName(), tableDefinition.getColumns());
         }
-
     }
 
     private void setDatasetFields(String table, List<Column> columns) throws Exception {

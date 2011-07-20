@@ -12,7 +12,7 @@ import java.util.List;
  * Time: 23:59
  * To change this template use File | Settings | File Templates.
  */
-public interface IConfigurable {
+public interface IPage {
     void setConnectionManager(ConnectionManager connectionManager);
 
     void addFields(String table, List<Field> fields);

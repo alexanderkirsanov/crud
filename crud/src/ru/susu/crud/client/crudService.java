@@ -5,24 +5,23 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import java.util.List;
-import java.util.Map;
 
 @RemoteServiceRelativePath("crudService")
 public interface crudService extends RemoteService {
 
     List<String> getTables();
 
-    void setTable(String tableName);
+    List<String[]> getData(String table);
 
-    Map<String, String> update();
-
-    List<String[]> getData(String s);
-
-    String[] getHeaders(String tableName);
+    String[] getHeaders(String tableName) ;
 
     List<String> getFieldsForInsert(String currentTable);
 
-    void insertData(String[] lines);
+    void insertData(String table, String[] lines);
+
+    void updateData(String table, int lineNumber, String[] newLine);
+
+    void deleteData(String table, int lineNumber);
 
 
     /**

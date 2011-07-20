@@ -72,7 +72,7 @@ public class crud implements EntryPoint {
                         for (int i = 0; i < table.getRowCount(); i++){
                             lines[i] = ((TextBox)table.getWidget(i, 1)).getText();
                         }
-                        crudService.App.getInstance().insertData(lines, new VoidAsyncCallback());
+                        crudService.App.getInstance().insertData(currentTable, lines, new VoidAsyncCallback());
                         baseView();
                     }
                 });
