@@ -83,7 +83,7 @@ public class CrudServiceManager implements IPage {
             }
             this.dataset.insertData(mapOfValues);
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 

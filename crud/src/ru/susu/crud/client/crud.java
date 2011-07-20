@@ -39,7 +39,6 @@ public class crud implements EntryPoint {
      * This is the entry point method.
      */
     public void onModuleLoad() {
-
         chooseTablePanel.add(chooseTableLabel);
         chooseTablePanel.add(chooseTableComboBox);
 
