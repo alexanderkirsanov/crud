@@ -42,7 +42,7 @@ public class PageConfiguratorTest {
         };
 
         verify(iPage).addFields(studentsTableName, studentsFieldList);
-
+         //TODO: add verify editor;
 
     }
 }
