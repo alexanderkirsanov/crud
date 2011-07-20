@@ -2,8 +2,10 @@ package ru.susu.crud.configurator;
 
 import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.Field;
+import ru.susu.crud.editor.Editor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,4 +18,6 @@ public interface IPage {
     void setConnectionManager(ConnectionManager connectionManager);
 
     void addFields(String table, List<Field> fields);
+
+    void addEditors(String table, Map<String, Editor> editorsMap);
 }

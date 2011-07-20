@@ -3,10 +3,12 @@ package ru.susu.crud.configurator;
 import ru.susu.crud.database.ConnectionProperties;
 import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.*;
+import ru.susu.crud.editor.Editor;
 import ru.susu.crud.xml.Column;
 import ru.susu.crud.xml.TableDefinition;
 import ru.susu.crud.xml.XMLReader;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,16 @@ public class PageConfigurator {
     }
 
     private void setFieldEditors(String table, List<Column> columns) {
+        Map<String, Editor> editorsMap = new HashMap<String, Editor>();
+        for (Column column : columns) {
+            editorsMap.put(column.getName(), createEditor(column, table));
+        }
+        servlet.addEditors(table, editorsMap);
+    }
 
+    private Editor createEditor(Column column, String table) {
+        //TODO:implement
+        return null;
     }
 
     private Field createField(Column column, String table) throws Exception {

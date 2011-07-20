@@ -24,7 +24,7 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     }
 
     @Override
-    public List<String[]> getData(String tableName) {
+    public List<String[]> selectData(String tableName) {
         return crudServiceManager.getData(tableName);
     }
 

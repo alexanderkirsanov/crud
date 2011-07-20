@@ -50,7 +50,7 @@ public class crud implements EntryPoint {
                 currentTable = tablesComboBox.getItemText(tablesComboBox.getSelectedIndex());
                 try {
                     crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
-                    crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
+                    crudService.App.getInstance().selectData(currentTable, new ViewDataAsyncCallBack(table));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -96,7 +96,7 @@ public class crud implements EntryPoint {
         subMainPanel.clear();
 
         crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(table));
-        crudService.App.getInstance().getData(currentTable, new ViewDataAsyncCallBack(table));
+        crudService.App.getInstance().selectData(currentTable, new ViewDataAsyncCallBack(table));
         table.setBorderWidth(1);
 
         subMainPanel.add(tableHeader);
