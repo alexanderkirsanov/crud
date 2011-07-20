@@ -1,33 +1,49 @@
-package ru.susu.crud.database;
+package ru.susu.crud.configurator;
 
+import ru.susu.crud.database.ConnectionProperties;
 import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.*;
 import ru.susu.crud.xml.Column;
 import ru.susu.crud.xml.TableDefinition;
+import ru.susu.crud.xml.XMLReader;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class DatasetFactory {
+public class PageConfigurator {
 
-    private Map<String, Dataset> datasetMap;
-    private HashMap<String, List<Field>> fieldListMap;
+    private IPage servlet;
 
-    public DatasetFactory(Map<String, TableDefinition> tables, ConnectionManager connectionManager) throws Exception {
-        datasetMap = new HashMap<String, Dataset>();
-        fieldListMap = new HashMap<String, List<Field>>();
-        for (TableDefinition tableDefinition : tables.values()) {
-            String tableName = tableDefinition.getName();
-            List<Field> fields = new LinkedList<Field>();
-            for (Column column : tableDefinition.getColumns()) {
-                fields.add(createField(column, tableName));
-            }
-            Dataset dataset = new Dataset(fields, connectionManager);
-            fieldListMap.put(tableName, fields);
-            datasetMap.put(tableName, dataset);
+    public PageConfigurator(IPage servlet) {
+        this.servlet = servlet;
+
+    }
+
+    public void configure() throws Exception {
+        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "lqip32", "4f3v6", 3306);
+        ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
+        XMLReader xmlReader = new XMLReader("table.xml");
+        Map<String, TableDefinition> tableDefinitionMap = xmlReader.getTables();
+
+        this.servlet.setConnectionManager(connectionManager);
+        for (TableDefinition tableDefinition : tableDefinitionMap.values()) {
+            setDatasetFields(tableDefinition.getName(), tableDefinition.getColumns());
+            setFieldEditors(tableDefinition.getName(), tableDefinition.getColumns());
         }
+    }
+
+    private void setDatasetFields(String table, List<Column> columns) throws Exception {
+        List<Field> fields = new LinkedList<Field>();
+        for (Column column : columns) {
+            fields.add(createField(column, table));
+        }
+        servlet.addFields(table, fields);
+
+    }
+
+    private void setFieldEditors(String table, List<Column> columns) {
+
     }
 
     private Field createField(Column column, String table) throws Exception {
@@ -49,13 +65,4 @@ public class DatasetFactory {
             throw new Exception("Incorrect XML file: type did not exists");
         }
     }
-
-    public Dataset getDataset(String tableName) {
-        return this.datasetMap.get(tableName);
-    }
-
-    public List<Field> getFields(String tableName) {
-        return this.fieldListMap.get(tableName);
-    }
 }
-

@@ -62,6 +62,13 @@ public class XMLReader {
                             String type = ((Node) textTList.item(0)).getNodeValue().trim();
                             column.setType(type);
 
+                            NodeList editorList = firstColumnElement.getElementsByTagName("editor");
+                            Element editorElement = (Element) editorList.item(0);
+
+                            NodeList editorTList = editorElement.getChildNodes();
+                            String editor = ((Node) editorTList.item(0)).getNodeValue().trim();
+                            column.setEditor(editor);
+
                             NodeList nullList = firstColumnElement.getElementsByTagName("is_null");
                             Element nullElement = (Element) nullList.item(0);
 

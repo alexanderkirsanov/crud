@@ -3,6 +3,7 @@ package ru.susu.crud.database.dataset;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.susu.crud.TestConnectionProperties;
 import ru.susu.crud.database.ConnectionProperties;
 import ru.susu.crud.database.commands.filter.FieldFilter;
 import ru.susu.crud.database.connection.ConnectionManager;
@@ -24,7 +25,7 @@ public class DatasetTest {
 
     @Before
     public void setUp() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
+        ConnectionProperties connectionProperties = TestConnectionProperties.getConnectionProperties();
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         statement = connectionManager.getConnection().createStatement();
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS test(id INTEGER KEY, "
@@ -148,7 +149,7 @@ public class DatasetTest {
 
     @After
     public void tearDown() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "dem", "s1234s", 3306);
+        ConnectionProperties connectionProperties = TestConnectionProperties.getConnectionProperties();
         ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         statement = connectionManager.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS test;");

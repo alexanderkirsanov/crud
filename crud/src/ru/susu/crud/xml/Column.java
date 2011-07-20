@@ -5,6 +5,7 @@ public class Column {
     private String type;
     private boolean isNull;
     private int size;
+    private String editor;
 
     public String getName() {
         return name;
@@ -45,6 +46,11 @@ public class Column {
                 ", type='" + type + '\'' +
                 ", isNull=" + isNull +
                 ", size=" + size +
+                ", editor=" + editor +
                 '}';
+    }
+
+    public void setEditor(String editor) {
+        this.editor = editor;
     }
 }
