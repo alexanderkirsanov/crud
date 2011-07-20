@@ -30,4 +30,30 @@ public class ConnectionManager {
         return DriverManager.
                 getConnection("jdbc:" + this.dbms + "://" + this.serverName + "/" + this.dbName, connectionProps);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ConnectionManager that = (ConnectionManager) o;
+
+        if (dbName != null ? !dbName.equals(that.dbName) : that.dbName != null) return false;
+        if (dbms != null ? !dbms.equals(that.dbms) : that.dbms != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (serverName != null ? !serverName.equals(that.serverName) : that.serverName != null) return false;
+        if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userName != null ? userName.hashCode() : 0;
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (dbms != null ? dbms.hashCode() : 0);
+        result = 31 * result + (serverName != null ? serverName.hashCode() : 0);
+        result = 31 * result + (dbName != null ? dbName.hashCode() : 0);
+        return result;
+    }
 }
