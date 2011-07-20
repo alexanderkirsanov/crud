@@ -11,11 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Configurator {
+public class PageConfigurator {
 
     private IPage servlet;
 
-    public Configurator(IPage servlet) {
+    public PageConfigurator(IPage servlet) {
         this.servlet = servlet;
 
     }

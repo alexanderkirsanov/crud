@@ -2,7 +2,7 @@ package ru.susu.crud.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import ru.susu.crud.client.crudService;
-import ru.susu.crud.configurator.Configurator;
+import ru.susu.crud.configurator.PageConfigurator;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     public crudServiceImpl() {
         try {
             crudServiceManager = new CrudServiceManager();
-            new Configurator(crudServiceManager).configure();
+            new PageConfigurator(crudServiceManager).configure();
         } catch (Exception e) {
             System.out.println("die");
         }
