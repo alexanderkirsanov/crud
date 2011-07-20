@@ -5,16 +5,17 @@ import ru.susu.crud.database.DatasetRepository;
 import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.Dataset;
 import ru.susu.crud.database.dataset.Field;
+import ru.susu.crud.editor.Editor;
 
 import java.util.*;
 
 public class CrudServiceManager implements IPage {
-    private ArrayList<String> sourceForView;
     private String tableName;
     private Dataset dataset;
     private List<Field> fields;
     private Map<String, String[]> mapOfData = new HashMap<String, String[]>();
     private ConnectionManager connectionManager;
+    private Map<String, Map<String, Editor>> editors = new HashMap<String, Map<String, Editor>>();
 
     public List<String> getTables() {
         prepareDataset();
@@ -33,18 +34,6 @@ public class CrudServiceManager implements IPage {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-    public Map<String, String> update() {
-        Map<String, String> mapOfString = new HashMap<String, String>();
-        if (tableName != null) {
-            for (Field field : DatasetRepository.getInstance().getFields(tableName)) {
-                mapOfString.put(field.getName(), "");
-            }
-        }
-        return mapOfString;
-
     }
 
     public List<String[]> getData(String tableName) {
@@ -138,5 +127,11 @@ public class CrudServiceManager implements IPage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void addEditors(String table, Map<String, Editor> editorsMap) {
+        this.editors.put(table, editorsMap);
+
     }
 }

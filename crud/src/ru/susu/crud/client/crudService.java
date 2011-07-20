@@ -11,7 +11,7 @@ public interface crudService extends RemoteService {
 
     List<String> getTables();
 
-    List<String[]> getData(String table);
+    List<String[]> selectData(String table);
 
     String[] getHeaders(String tableName) ;
 

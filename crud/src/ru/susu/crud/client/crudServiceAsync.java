@@ -8,7 +8,7 @@ public interface crudServiceAsync {
 
     void getTables(AsyncCallback<List<String>> async);
 
-    void getData(String table, AsyncCallback<List<String[]>> async);
+    void selectData(String table, AsyncCallback<List<String[]>> async);
 
     void getHeaders(String tableName, AsyncCallback<String[]> async);
 
