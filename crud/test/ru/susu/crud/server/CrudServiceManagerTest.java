@@ -9,11 +9,15 @@ import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.Field;
 import ru.susu.crud.database.dataset.IntegerField;
 import ru.susu.crud.database.dataset.StringField;
+import ru.susu.crud.editor.Editor;
+import ru.susu.crud.editor.TextEditor;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -93,6 +97,26 @@ public class CrudServiceManagerTest {
         assertArrayEquals(line, crudServiceManager.getData(table).get(0));
         crudServiceManager.deleteData(table, 0);
         assertEquals(0, crudServiceManager.getData(table).size());
+    }
+
+    @Test
+    public void editorsTest() throws Exception {
+        List<Field> fields = new LinkedList<Field>();
+        fields.add(idField);
+        fields.add(nameField);
+        crudServiceManager.addFields(table, fields);
+        final Editor idEditor = new TextEditor();
+        final Editor nameEditor = new TextEditor(25);
+        Map<String, Editor> mapOfEditor = new HashMap<String, Editor>() {
+            {
+                put("id", idEditor);
+                put("name", nameEditor);
+            }
+        };
+        crudServiceManager.addEditors(table, mapOfEditor);
+        crudServiceManager.addFields(table, fields);
+        assertEquals(2, crudServiceManager.getEditors(table).size());
+        assertEquals("TextEditor", crudServiceManager.getEditors(table).get(0).get("type")[0]);
     }
 
 

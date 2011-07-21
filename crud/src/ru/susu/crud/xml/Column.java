@@ -53,4 +53,8 @@ public class Column {
     public void setEditor(String editor) {
         this.editor = editor;
     }
+
+    public String getEditor() {
+        return this.editor;
+    }
 }

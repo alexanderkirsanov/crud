@@ -5,6 +5,7 @@ import ru.susu.crud.client.crudService;
 import ru.susu.crud.configurator.PageConfigurator;
 
 import java.util.List;
+import java.util.Map;
 
 public class crudServiceImpl extends RemoteServiceServlet implements crudService {
     private CrudServiceManager crudServiceManager;
@@ -51,6 +52,11 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     @Override
     public void deleteData(String table, int lineNumber) {
         crudServiceManager.deleteData(table, lineNumber);
+    }
+
+    @Override
+    public List<Map<String, String[]>> getEditors(String tableName) {
+        return crudServiceManager.getEditors(tableName);
     }
 
 

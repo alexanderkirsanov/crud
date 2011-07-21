@@ -42,4 +42,12 @@ public class ColumnTest {
         column.setSize(size);
         assertEquals(size, column.getSize());
     }
+
+    @Test
+    public void editorTest() throws Exception {
+        String editor = "TextEditor";
+        column.setEditor(editor);
+        assertEquals(editor, column.getEditor());
+    }
+
 }

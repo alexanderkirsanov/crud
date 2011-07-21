@@ -7,9 +7,14 @@ import ru.susu.crud.database.dataset.DateField;
 import ru.susu.crud.database.dataset.Field;
 import ru.susu.crud.database.dataset.IntegerField;
 import ru.susu.crud.database.dataset.StringField;
+import ru.susu.crud.editor.DateEditor;
+import ru.susu.crud.editor.Editor;
+import ru.susu.crud.editor.TextEditor;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -42,7 +47,26 @@ public class PageConfiguratorTest {
         };
 
         verify(iPage).addFields(studentsTableName, studentsFieldList);
-         //TODO: add verify editor;
 
+        final Editor idEditor = new TextEditor();
+        final Editor nameEditor = new TextEditor(20);
+        final Editor dateEditor = new DateEditor();
+        Map<String, Editor> mapOfEditorForStudentsTable = new HashMap<String, Editor>() {
+            {
+                put("id", idEditor);
+                put("name", nameEditor);
+                put("data", dateEditor);
+            }
+        };
+
+        Map<String, Editor> mapOfEditorForTestTable = new HashMap<String, Editor>() {
+            {
+                put("id", new TextEditor());
+                put("name", new TextEditor());
+                put("age", new TextEditor());
+            }
+        };
+        verify(iPage).addEditors("students", mapOfEditorForStudentsTable);
+        verify(iPage).addEditors("test", mapOfEditorForTestTable);
     }
 }

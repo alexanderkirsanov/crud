@@ -3,6 +3,7 @@ package ru.susu.crud.client;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.List;
+import java.util.Map;
 
 public interface crudServiceAsync {
 
@@ -19,4 +20,6 @@ public interface crudServiceAsync {
     void updateData(String table, int lineNumber, String[] newLine, AsyncCallback<Void> async);
 
     void deleteData(String table, int lineNumber, AsyncCallback<Void> async);
+
+    void getEditors(String tableName, AsyncCallback<List<Map<String, String[]>>> async);
 }

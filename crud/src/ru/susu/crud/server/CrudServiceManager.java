@@ -18,7 +18,6 @@ public class CrudServiceManager implements IPage {
     private Map<String, Map<String, Editor>> editors = new HashMap<String, Map<String, Editor>>();
 
     public List<String> getTables() {
-//        prepareDataset();
         List<String> tables = new ArrayList<String>();
         for (String table : DatasetRepository.getInstance().getTables()) {
             tables.add(table);
@@ -110,10 +109,20 @@ public class CrudServiceManager implements IPage {
             prepareDataset();
             this.dataset.deleteData(lineNumber);
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 
+    public List<Map<String, String[]>> getEditors(String tableName) {
+        this.tableName = tableName;
+        prepareDataset();
+        Map<String, Editor> editorSetting = this.editors.get(tableName);
+        List<Map<String, String[]>> listOfEditors = new LinkedList<Map<String, String[]>>();
+        for (Field field : this.fields) {
+            listOfEditors.add(editorSetting.get(field.getName()).getDefinition());
+        }
+        return listOfEditors;
+    }
 
     @Override
     public void setConnectionManager(ConnectionManager connectionManager) {
@@ -133,6 +142,5 @@ public class CrudServiceManager implements IPage {
     @Override
     public void addEditors(String table, Map<String, Editor> editorsMap) {
         this.editors.put(table, editorsMap);
-
     }
 }
