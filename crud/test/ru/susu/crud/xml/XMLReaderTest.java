@@ -18,4 +18,9 @@ public class XMLReaderTest {
     public void readDefenitionTest() {
         assertEquals(2, xmlReader.getTables().size());
     }
+
+    @Test
+    public void connectionPropertiesTest() {
+        assertEquals(3306, xmlReader.getConnectionProperties().getPort());
+    }
 }

@@ -1,6 +1,5 @@
 package ru.susu.crud.configurator;
 
-import ru.susu.crud.database.ConnectionProperties;
 import ru.susu.crud.database.connection.ConnectionManager;
 import ru.susu.crud.database.dataset.*;
 import ru.susu.crud.editor.DateEditor;
@@ -25,11 +24,9 @@ public class PageConfigurator {
     }
 
     public void configure() throws Exception {
-        ConnectionProperties connectionProperties = new ConnectionProperties("localhost", "test", "lqip32", "4f3v6", 3306);
-        ConnectionManager connectionManager = new ConnectionManager(connectionProperties);
         XMLReader xmlReader = new XMLReader("table.xml");
+        ConnectionManager connectionManager = new ConnectionManager(xmlReader.getConnectionProperties());
         Map<String, TableDefinition> tableDefinitionMap = xmlReader.getTables();
-
         this.servlet.setConnectionManager(connectionManager);
         for (TableDefinition tableDefinition : tableDefinitionMap.values()) {
             setDatasetFields(tableDefinition.getName(), tableDefinition.getColumns());

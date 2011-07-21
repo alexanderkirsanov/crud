@@ -180,7 +180,6 @@ public class crud implements EntryPoint {
 
         @Override
         public void onFailure(Throwable throwable) {
-            //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override
@@ -224,9 +223,9 @@ public class crud implements EntryPoint {
     }
 
     private class UpdateButtonClickHandler implements ClickHandler {
-
-        private int lineToUpdate;
-        private String[] updatingLine;
+        //обязательно финальные поля, т.к. ты их прокидываешь во внутренний анонимный класс : )
+        private final int lineToUpdate;
+        private final String[] updatingLine;
 
         public UpdateButtonClickHandler(int lineToUpdate, String[] updatingLine) {
             this.lineToUpdate = lineToUpdate;
@@ -239,9 +238,9 @@ public class crud implements EntryPoint {
             setTableHeaderText("Update the entry");
             crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
 
-            //for (int i=0; i<updatingLine.length; i++){
-              //  Window.alert(updatingLine[i]);
-            //}
+            for (String anUpdatingLine : updatingLine) {
+                Window.alert(anUpdatingLine);
+            }
             //for (int i=0; i<updatingLine.length; i++) {
                 //Window.alert(mainTable.getWidget(0,1).getClass().toString());
             //}
