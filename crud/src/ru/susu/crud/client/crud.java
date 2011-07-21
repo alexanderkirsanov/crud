@@ -156,7 +156,13 @@ public class crud implements EntryPoint {
                 for (int j = 0; j < line.length; j++){
                     this.table.setText(i+2,j,line[j]);
                 }
-                this.table.setWidget(i+2,line.length,new Button("Delete"));
+                final int row = i+1;
+                this.table.setWidget(i+2,line.length, (Widget) new Button("Delete").addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                       crudService.App.getInstance().deleteData(currentTable, row, new VoidAsyncCallback());
+                    }
+                }));
                 this.table.setWidget(i+2,line.length+1,new Button("Update"));
                 i++;
             }
