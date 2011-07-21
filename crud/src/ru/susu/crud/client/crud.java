@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public class crud implements EntryPoint {
 
         @Override
         public void onFailure(Throwable caught) {
-            //Window.alert("!!!");
+            Window.alert("!!!");
         }
 
         @Override
@@ -138,7 +139,7 @@ public class crud implements EntryPoint {
                 this.table.setWidget(i + 2, line.length, deleteButton);
 
                 Button updateButton = new Button("Update");
-                updateButton.addClickHandler(new UpdateButtonClickHandler(i));
+                updateButton.addClickHandler(new UpdateButtonClickHandler(i,line));
                 this.table.setWidget(i+2,line.length+1,updateButton);
 
                 i++;
@@ -225,14 +226,33 @@ public class crud implements EntryPoint {
     private class UpdateButtonClickHandler implements ClickHandler {
 
         private int lineToUpdate;
+        private String[] updatingLine;
 
-        public UpdateButtonClickHandler(int lineToUpdate) {
+        public UpdateButtonClickHandler(int lineToUpdate, String[] updatingLine) {
             this.lineToUpdate = lineToUpdate;
+            this.updatingLine = updatingLine;
         }
 
         @Override
         public void onClick(ClickEvent event) {
+            subMainPanel.clear();
+            setTableHeaderText("Update the entry");
+            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
 
+            //for (int i=0; i<updatingLine.length; i++){
+              //  Window.alert(updatingLine[i]);
+            //}
+            //for (int i=0; i<updatingLine.length; i++) {
+                //Window.alert(mainTable.getWidget(0,1).getClass().toString());
+            //}
+
+            Button updateEntryButton = new Button("Update");
+
+            updateEntryButton.addClickHandler(new UpdateEntryButtonClickHandler());
+
+            subMainPanel.add(tableHeader);
+            subMainPanel.add(mainTable);
+            subMainPanel.add(updateEntryButton);
         }
     }
 
@@ -250,6 +270,12 @@ public class crud implements EntryPoint {
             subMainPanel.add(tableHeader);
             subMainPanel.add(mainTable);
             subMainPanel.add(insertButton);
+        }
+    }
+    private class UpdateEntryButtonClickHandler implements ClickHandler {
+        @Override
+        public void onClick(ClickEvent event) {
+
         }
     }
 }
