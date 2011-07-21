@@ -62,17 +62,7 @@ public class crud implements EntryPoint {
                 crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
                 Button insertButton = new Button("Add to mainTable");
 
-                insertButton.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent clickEvent) {
-                        String[] lines = new String[mainTable.getRowCount()];
-                        for (int i = 0; i < mainTable.getRowCount(); i++){
-                            lines[i] = ((TextBox) mainTable.getWidget(i, 1)).getText();
-                        }
-                        crudService.App.getInstance().insertData(currentTable, lines, new VoidAsyncCallback());
-                        baseView();
-                    }
-                });
+                insertButton.addClickHandler(new InsertButtonClickHandler());
 
                 subMainPanel.add(tableHeader);
                 subMainPanel.add(mainTable);
@@ -208,7 +198,7 @@ public class crud implements EntryPoint {
             table.removeAllRows();
             int column = 0;
             for (String s : result) {
-                this.table.setText(0,column,s);
+                this.table.setText(0, column, s);
                 column++;
             }
         }
@@ -225,6 +215,19 @@ public class crud implements EntryPoint {
         @Override
         public void onClick(ClickEvent event) {
             crudService.App.getInstance().deleteData(currentTable, lineToDelete, new VoidAsyncCallback());
+            baseView();
+        }
+    }
+
+    private class InsertButtonClickHandler implements ClickHandler {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            String[] lines = new String[mainTable.getRowCount()];
+            for (int i = 0; i < mainTable.getRowCount(); i++){
+                lines[i] = ((TextBox) mainTable.getWidget(i, 1)).getText();
+            }
+            crudService.App.getInstance().insertData(currentTable, lines, new VoidAsyncCallback());
             baseView();
         }
     }
