@@ -5,7 +5,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
@@ -54,21 +53,7 @@ public class crud implements EntryPoint {
             }
         });
 
-        addEntryButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                subMainPanel.clear();
-                setTableHeaderText("Add the entry");
-                crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
-                Button insertButton = new Button("Add to mainTable");
-
-                insertButton.addClickHandler(new InsertButtonClickHandler());
-
-                subMainPanel.add(tableHeader);
-                subMainPanel.add(mainTable);
-                subMainPanel.add(insertButton);
-            }
-        });
+        addEntryButton.addClickHandler(new AddEntryClickHandler());
 
         crudService.App.getInstance().getTables(new ViewTablesAsyncCallBack(chooseTableComboBox));
         currentTable = "test";
@@ -147,10 +132,15 @@ public class crud implements EntryPoint {
                 for (int j = 0; j < line.length; j++){
                     this.table.setText(i+2,j,line[j]);
                 }
+
                 Button deleteButton = new Button("Delete");
                 deleteButton.addClickHandler(new DeleteButtonClickHandler(i));
                 this.table.setWidget(i + 2, line.length, deleteButton);
-                this.table.setWidget(i+2,line.length+1,new Button("Update"));
+
+                Button updateButton = new Button("Update");
+                updateButton.addClickHandler(new UpdateButtonClickHandler(i));
+                this.table.setWidget(i+2,line.length+1,updateButton);
+
                 i++;
             }
         }
@@ -229,6 +219,37 @@ public class crud implements EntryPoint {
             }
             crudService.App.getInstance().insertData(currentTable, lines, new VoidAsyncCallback());
             baseView();
+        }
+    }
+
+    private class UpdateButtonClickHandler implements ClickHandler {
+
+        private int lineToUpdate;
+
+        public UpdateButtonClickHandler(int lineToUpdate) {
+            this.lineToUpdate = lineToUpdate;
+        }
+
+        @Override
+        public void onClick(ClickEvent event) {
+
+        }
+    }
+
+    private class AddEntryClickHandler implements ClickHandler {
+
+        @Override
+        public void onClick(ClickEvent event) {
+            subMainPanel.clear();
+            setTableHeaderText("Add the entry");
+            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
+            Button insertButton = new Button("Add to mainTable");
+
+            insertButton.addClickHandler(new InsertButtonClickHandler());
+
+            subMainPanel.add(tableHeader);
+            subMainPanel.add(mainTable);
+            subMainPanel.add(insertButton);
         }
     }
 }
