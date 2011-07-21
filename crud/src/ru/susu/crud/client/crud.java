@@ -109,6 +109,7 @@ public class crud implements EntryPoint {
 
         @Override
         public void onFailure(Throwable caught) {
+            //Window.alert("!!!");
         }
 
         @Override
@@ -156,7 +157,9 @@ public class crud implements EntryPoint {
                 for (int j = 0; j < line.length; j++){
                     this.table.setText(i+2,j,line[j]);
                 }
-                this.table.setWidget(i+2,line.length,new Button("Delete"));
+                Button deleteButton = new Button("Delete");
+                deleteButton.addClickHandler(new DeleteButtonClickHandler(i));
+                this.table.setWidget(i + 2, line.length, deleteButton);
                 this.table.setWidget(i+2,line.length+1,new Button("Update"));
                 i++;
             }
@@ -208,6 +211,21 @@ public class crud implements EntryPoint {
                 this.table.setText(0,column,s);
                 column++;
             }
+        }
+    }
+
+    private class DeleteButtonClickHandler implements ClickHandler {
+
+        private int lineToDelete;
+
+        public DeleteButtonClickHandler(int lineToDelete){
+            this.lineToDelete = lineToDelete;
+        }
+
+        @Override
+        public void onClick(ClickEvent event) {
+            crudService.App.getInstance().deleteData(currentTable, lineToDelete, new VoidAsyncCallback());
+            baseView();
         }
     }
 }
