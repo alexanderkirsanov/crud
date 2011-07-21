@@ -137,7 +137,7 @@ public class crud implements EntryPoint {
 
         @Override
         public void onFailure(Throwable throwable) {
-            Window.alert("!");
+            //Window.alert("!");
         }
 
         @Override
