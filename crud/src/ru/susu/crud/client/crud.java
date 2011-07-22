@@ -5,11 +5,9 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-
-import java.util.List;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
@@ -169,7 +167,7 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewFieldsForInsertAsyncCallBack implements AsyncCallback<List<String>> {
+    private class ViewFieldsForInsertAsyncCallBack implements AsyncCallback<String[]> {
             private FlexTable table;
 
             public ViewFieldsForInsertAsyncCallBack(FlexTable table) {
@@ -182,7 +180,7 @@ public class crud implements EntryPoint {
             }
 
             @Override
-            public void onSuccess(List<String> result) {
+            public void onSuccess(String[] result) {
                 table.removeAllRows();
                 int row = 0;
                 for (String header : result) {
@@ -194,7 +192,7 @@ public class crud implements EntryPoint {
             }
         }
 
-    private class ViewFieldsForUpdateAsyncCallBack implements AsyncCallback<List<String>> {
+    private class ViewFieldsForUpdateAsyncCallBack implements AsyncCallback<String[]> {
         private FlexTable table;
         private String[] updatingLine;
 
@@ -209,7 +207,7 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(List<String> result) {
+        public void onSuccess(String[] result) {
             table.removeAllRows();
             int row = 0;
             for (String header : result) {

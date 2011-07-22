@@ -51,8 +51,8 @@ public class CrudServiceManagerTest {
         fields.add(idField);
         fields.add(nameField);
         crudServiceManager.addFields(table, fields);
-        assertEquals(1, crudServiceManager.getTables().size());
-        assertEquals(2, crudServiceManager.getHeaders(table).size());
+        assertEquals(1, crudServiceManager.getTables().length);
+        assertEquals(2, crudServiceManager.getHeaders(table).length);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class CrudServiceManagerTest {
         crudServiceManager.addFields(table, fields);
         String[] line = new String[]{"1", "Alex"};
         crudServiceManager.insertData(table, line);
-        assertArrayEquals(line, crudServiceManager.getData(table).get(0));
+        assertArrayEquals(line, crudServiceManager.getData(table)[0]);
     }
 
     @Test

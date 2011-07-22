@@ -33,16 +33,24 @@ public class CrudServiceManager implements IPage {
         try {
             this.dataset.selectData();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
     public String[][] getData(String tableName) {
         this.tableName = tableName;
-        String[][] result = new String[dataset.getRowCount()][];
         prepareDataset();
-        for (int i = 0; i < this.dataset.getRowCount(); i++) {
-            result[i] = this.dataset.getLine(i);
+        String[][] result = null;
+        int rowCount = dataset.getRowCount();
+        if (rowCount > 0) {
+            result = new String[rowCount][dataset.getLine(0).length];
+            for (int i = 0; i < this.dataset.getRowCount(); i++) {
+                int j = 0;
+                for (String str : this.dataset.getLine(i)) {
+                    result[i][j] = str;
+                    j++;
+                }
+            }
         }
         return result;
     }
