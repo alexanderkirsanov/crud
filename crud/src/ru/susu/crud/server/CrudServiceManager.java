@@ -46,29 +46,15 @@ public class CrudServiceManager implements IPage {
     }
 
 
-    public String[] getHeaders(String tableName) {
+    public List<String> getHeaders(String tableName) {
         this.tableName = tableName;
         prepareDataset();
-        String[] result = new String[fields.size()];
-        int i = 0;
-        for (Field field : fields) {
-            result[i] = field.getName();
-            i++;
-        }
-        return result;
-    }
-
-
-    public List<String> getFieldsForInsert(String currentTable) {
-        this.tableName = currentTable;
-        prepareDataset();
         List<String> result = new LinkedList<String>();
-        for (Field field : this.fields) {
+        for (Field field : fields) {
             result.add(field.getName());
         }
         return result;
     }
-
 
     public void insertData(String tableName, String[] lines) {
         this.tableName = tableName;

@@ -18,7 +18,7 @@ public class crud implements EntryPoint {
     private String currentTable;
 
     private VerticalPanel chooseTablePanel = new VerticalPanel();
-    private Label chooseTableLabel = new Label("Choose the mainTable");
+    private Label chooseTableLabel = new Label("Choose the table");
     private ListBox chooseTableComboBox = new ListBox(false);
 
     private VerticalPanel subMainPanel = new VerticalPanel();
@@ -147,7 +147,7 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewHeadersAsyncCallBack implements AsyncCallback<String[]> {
+    private class ViewHeadersAsyncCallBack implements AsyncCallback<List<String>> {
         private FlexTable table;
 
         public ViewHeadersAsyncCallBack(FlexTable table) {
@@ -159,7 +159,7 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(String[] result) {
+        public void onSuccess(List<String> result) {
             setTableHeaderText(currentTable.toUpperCase());
             table.removeAllRows();
             int column = 0;
@@ -263,7 +263,7 @@ public class crud implements EntryPoint {
         public void onClick(ClickEvent event) {
             subMainPanel.clear();
             setTableHeaderText("Update the entry");
-            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldsForUpdateAsyncCallBack(mainTable, updatingLine));
+            crudService.App.getInstance().getHeaders(currentTable, new ViewFieldsForUpdateAsyncCallBack(mainTable, updatingLine));
 
             Button updateEntryButton = new Button("Update");
 
@@ -281,8 +281,8 @@ public class crud implements EntryPoint {
         public void onClick(ClickEvent event) {
             subMainPanel.clear();
             setTableHeaderText("Add the entry");
-            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldsForInsertAsyncCallBack(mainTable));
-            Button insertButton = new Button("Add to mainTable");
+            crudService.App.getInstance().getHeaders(currentTable, new ViewFieldsForInsertAsyncCallBack(mainTable));
+            Button insertButton = new Button("Add to the table");
 
             insertButton.addClickHandler(new InsertButtonClickHandler());
 

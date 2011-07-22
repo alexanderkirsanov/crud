@@ -30,13 +30,8 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     }
 
     @Override
-    public String[] getHeaders(String tableName) {
+    public List<String> getHeaders(String tableName) {
         return crudServiceManager.getHeaders(tableName);
-    }
-
-    @Override
-    public List<String> getFieldsForInsert(String currentTable) {
-        return crudServiceManager.getFieldsForInsert(currentTable);
     }
 
     @Override

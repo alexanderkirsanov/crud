@@ -52,7 +52,7 @@ public class CrudServiceManagerTest {
         fields.add(nameField);
         crudServiceManager.addFields(table, fields);
         assertEquals(1, crudServiceManager.getTables().size());
-        assertEquals(2, crudServiceManager.getFieldsForInsert(table).size());
+        assertEquals(2, crudServiceManager.getHeaders(table).size());
     }
 
     @Test
