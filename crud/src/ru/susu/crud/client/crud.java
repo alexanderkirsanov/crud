@@ -147,30 +147,6 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewFieldsForInsertAsyncCallBack implements AsyncCallback<List<String>> {
-        private FlexTable table;
-
-        public ViewFieldsForInsertAsyncCallBack(FlexTable table) {
-            this.table = table;
-        }
-
-        @Override
-        public void onFailure(Throwable throwable) {
-
-        }
-
-        @Override
-        public void onSuccess(List<String> result) {
-            table.removeAllRows();
-            int row = 0;
-            for (String header : result) {
-                table.setText(row, 0, header);
-                table.setWidget(row, 1, new TextBox());
-                row++;
-            }
-        }
-    }
-
     private class ViewHeadersAsyncCallBack implements AsyncCallback<String[]> {
         private FlexTable table;
 
@@ -194,6 +170,31 @@ public class crud implements EntryPoint {
         }
     }
 
+    private class ViewFieldsForInsertAsyncCallBack implements AsyncCallback<List<String>> {
+            private FlexTable table;
+
+            public ViewFieldsForInsertAsyncCallBack(FlexTable table) {
+                this.table = table;
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(List<String> result) {
+                table.removeAllRows();
+                int row = 0;
+                for (String header : result) {
+                    table.setText(row, 0, header);
+                    EditorsFactory ef = new EditorsFactory();
+                    table.setWidget(row, 1, ef.getEditor());
+                    row++;
+                }
+            }
+        }
+
     private class ViewFieldsForUpdateAsyncCallBack implements AsyncCallback<List<String>> {
         private FlexTable table;
         private String[] updatingLine;
@@ -214,9 +215,8 @@ public class crud implements EntryPoint {
             int row = 0;
             for (String header : result) {
                 table.setText(row, 0, header);
-                TextBox tb = new TextBox();
-                tb.setText(updatingLine[row]);
-                table.setWidget(row, 1, tb);
+                EditorsFactory ef = new EditorsFactory(updatingLine[row]);
+                table.setWidget(row, 1, ef.getEditor());
                 row++;
             }
         }
@@ -251,7 +251,6 @@ public class crud implements EntryPoint {
     }
 
     private class UpdateButtonClickHandler implements ClickHandler {
-        //обязательно финальные поля, т.к. ты их прокидываешь во внутренний анонимный класс : )
         private final int lineToUpdate;
         private final String[] updatingLine;
 
@@ -307,6 +306,26 @@ public class crud implements EntryPoint {
             }
             crudService.App.getInstance().updateData(currentTable, this.lineToUpdate, lines, new VoidAsyncCallback());
             baseView();
+        }
+    }
+
+    private class EditorsFactory {
+        private String textBoxText;
+
+        public EditorsFactory(){
+            this.textBoxText = null;
+        }
+
+        public EditorsFactory(String text) {
+            this.textBoxText = text;
+        }
+
+        public Widget getEditor(){
+            TextBox tb = new TextBox();
+            if (this.textBoxText!=null) {
+                tb.setText(textBoxText);
+            }
+            return tb;
         }
     }
 }
