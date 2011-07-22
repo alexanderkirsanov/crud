@@ -33,7 +33,7 @@ public class CrudServiceManager implements IPage {
         try {
             this.dataset.selectData();
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
