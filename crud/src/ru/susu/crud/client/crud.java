@@ -147,10 +147,10 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewFieldAsyncCallBack implements AsyncCallback<List<String>> {
+    private class ViewFieldsForInsertAsyncCallBack implements AsyncCallback<List<String>> {
         private FlexTable table;
 
-        public ViewFieldAsyncCallBack(FlexTable table) {
+        public ViewFieldsForInsertAsyncCallBack(FlexTable table) {
             this.table = table;
         }
 
@@ -190,6 +190,34 @@ public class crud implements EntryPoint {
             for (String s : result) {
                 this.table.setText(0, column, s);
                 column++;
+            }
+        }
+    }
+
+    private class ViewFieldsForUpdateAsyncCallBack implements AsyncCallback<List<String>> {
+        private FlexTable table;
+        private String[] updatingLine;
+
+        public ViewFieldsForUpdateAsyncCallBack(FlexTable table, String[] updatingLine) {
+            this.table = table;
+            this.updatingLine = updatingLine;
+        }
+
+        @Override
+        public void onFailure(Throwable caught) {
+
+        }
+
+        @Override
+        public void onSuccess(List<String> result) {
+            table.removeAllRows();
+            int row = 0;
+            for (String header : result) {
+                table.setText(row, 0, header);
+                TextBox tb = new TextBox();
+                tb.setText(updatingLine[row]);
+                table.setWidget(row, 1, tb);
+                row++;
             }
         }
     }
@@ -236,18 +264,11 @@ public class crud implements EntryPoint {
         public void onClick(ClickEvent event) {
             subMainPanel.clear();
             setTableHeaderText("Update the entry");
-            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
-
-            for (String anUpdatingLine : updatingLine) {
-                Window.alert(anUpdatingLine);
-            }
-            //for (int i=0; i<updatingLine.length; i++) {
-                //Window.alert(mainTable.getWidget(0,1).getClass().toString());
-            //}
+            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldsForUpdateAsyncCallBack(mainTable, updatingLine));
 
             Button updateEntryButton = new Button("Update");
 
-            updateEntryButton.addClickHandler(new UpdateEntryButtonClickHandler());
+            updateEntryButton.addClickHandler(new UpdateEntryButtonClickHandler(this.lineToUpdate));
 
             subMainPanel.add(tableHeader);
             subMainPanel.add(mainTable);
@@ -261,7 +282,7 @@ public class crud implements EntryPoint {
         public void onClick(ClickEvent event) {
             subMainPanel.clear();
             setTableHeaderText("Add the entry");
-            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldAsyncCallBack(mainTable));
+            crudService.App.getInstance().getFieldsForInsert(currentTable, new ViewFieldsForInsertAsyncCallBack(mainTable));
             Button insertButton = new Button("Add to mainTable");
 
             insertButton.addClickHandler(new InsertButtonClickHandler());
@@ -272,9 +293,20 @@ public class crud implements EntryPoint {
         }
     }
     private class UpdateEntryButtonClickHandler implements ClickHandler {
+        private int lineToUpdate;
+
+        public UpdateEntryButtonClickHandler(int lineToUpdate) {
+            this.lineToUpdate = lineToUpdate;
+        }
+
         @Override
         public void onClick(ClickEvent event) {
-
+            String[] lines = new String[mainTable.getRowCount()];
+            for (int i = 0; i < mainTable.getRowCount(); i++){
+                lines[i] = ((TextBox) mainTable.getWidget(i, 1)).getText();
+            }
+            crudService.App.getInstance().updateData(currentTable, this.lineToUpdate, lines, new VoidAsyncCallback());
+            baseView();
         }
     }
 }
