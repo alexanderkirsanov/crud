@@ -15,22 +15,22 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
             crudServiceManager = new CrudServiceManager();
             new PageConfigurator(crudServiceManager).configure();
         } catch (Exception e) {
-            System.out.println("die");
+            e.printStackTrace();
         }
     }
 
     @Override
-    public List<String> getTables() {
+    public String[] getTables() {
         return crudServiceManager.getTables();
     }
 
     @Override
-    public List<String[]> selectData(String tableName) {
+    public String[][] selectData(String tableName) {
         return crudServiceManager.getData(tableName);
     }
 
     @Override
-    public List<String> getHeaders(String tableName) {
+    public String[] getHeaders(String tableName) {
         return crudServiceManager.getHeaders(tableName);
     }
 

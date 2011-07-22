@@ -93,7 +93,7 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewTablesAsyncCallBack implements AsyncCallback<List<String>> {
+    private class ViewTablesAsyncCallBack implements AsyncCallback<String[]> {
         private ListBox innerViewCombo;
 
         public ViewTablesAsyncCallBack(ListBox comboBox) {
@@ -106,7 +106,7 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(List<String> result) {
+        public void onSuccess(String[] result) {
             for (String tab : result) {
                 this.innerViewCombo.addItem(tab);
             }
@@ -114,7 +114,7 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewDataAsyncCallBack implements AsyncCallback<List<String[]>> {
+    private class ViewDataAsyncCallBack implements AsyncCallback<String[][]> {
         private FlexTable table;
 
         public ViewDataAsyncCallBack(FlexTable table) {
@@ -127,7 +127,7 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(List<String[]> result) {
+        public void onSuccess(String[][] result) {
             int i = 0;
             for (String[] line : result){
                 for (int j = 0; j < line.length; j++){
@@ -147,7 +147,7 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewHeadersAsyncCallBack implements AsyncCallback<List<String>> {
+    private class ViewHeadersAsyncCallBack implements AsyncCallback<String[]> {
         private FlexTable table;
 
         public ViewHeadersAsyncCallBack(FlexTable table) {
@@ -159,8 +159,7 @@ public class crud implements EntryPoint {
         }
 
         @Override
-        public void onSuccess(List<String> result) {
-            setTableHeaderText(currentTable.toUpperCase());
+        public void onSuccess(String[] result) {
             table.removeAllRows();
             int column = 0;
             for (String s : result) {

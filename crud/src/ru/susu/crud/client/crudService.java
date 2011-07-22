@@ -10,11 +10,11 @@ import java.util.Map;
 @RemoteServiceRelativePath("crudService")
 public interface crudService extends RemoteService {
 
-    List<String> getTables();
+    String[] getTables();
 
-    List<String[]> selectData(String table);
+   String[][] selectData(String table);
 
-    List<String> getHeaders(String tableName);
+    String[] getHeaders(String tableName);
 
     void insertData(String table, String[] lines);
 

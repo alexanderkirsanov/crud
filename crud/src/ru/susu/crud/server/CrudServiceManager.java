@@ -17,12 +17,14 @@ public class CrudServiceManager implements IPage {
     private ConnectionManager connectionManager;
     private Map<String, Map<String, Editor>> editors = new HashMap<String, Map<String, Editor>>();
 
-    public List<String> getTables() {
-        List<String> tables = new ArrayList<String>();
+    public String[] getTables() {
+        String[] result = new String[DatasetRepository.getInstance().getTables().size()];
+        int i = 0;
         for (String table : DatasetRepository.getInstance().getTables()) {
-            tables.add(table);
+            result[i] = table;
+            i++;
         }
-        return tables;
+        return result;
     }
 
     private void prepareDataset() {
@@ -35,26 +37,29 @@ public class CrudServiceManager implements IPage {
         }
     }
 
-    public List<String[]> getData(String tableName) {
+    public String[][] getData(String tableName) {
         this.tableName = tableName;
-        List<String[]> result = new LinkedList<String[]>();
+        String[][] result = new String[dataset.getRowCount()][];
         prepareDataset();
         for (int i = 0; i < this.dataset.getRowCount(); i++) {
-            result.add(i, this.dataset.getLine(i));
+            result[i] = this.dataset.getLine(i);
         }
         return result;
     }
 
 
-    public List<String> getHeaders(String tableName) {
+    public String[] getHeaders(String tableName) {
         this.tableName = tableName;
         prepareDataset();
-        List<String> result = new LinkedList<String>();
+        String[] result = new String[fields.size()];
+        int i = 0;
         for (Field field : fields) {
-            result.add(field.getName());
+            result[i] = field.getName();
+            i++;
         }
         return result;
     }
+
 
     public void insertData(String tableName, String[] lines) {
         this.tableName = tableName;

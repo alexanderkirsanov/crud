@@ -18,12 +18,15 @@ public class PageConfigurator {
 
     private IPage servlet;
 
+
     public PageConfigurator(IPage servlet) {
         this.servlet = servlet;
+
 
     }
 
     public void configure() throws Exception {
+
         XMLReader xmlReader = new XMLReader("table.xml");
         ConnectionManager connectionManager = new ConnectionManager(xmlReader.getConnectionProperties());
         Map<String, TableDefinition> tableDefinitionMap = xmlReader.getTables();

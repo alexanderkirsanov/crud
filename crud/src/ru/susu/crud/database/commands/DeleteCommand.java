@@ -12,7 +12,9 @@ public class DeleteCommand {
 
 
     public String createCommand(Map<String, String> mapOfParameters) {
-        StringBuilder commandBuilder = new StringBuilder("DELETE FROM ").append(tableName).append(" WHERE ");
+        StringBuilder commandBuilder = new StringBuilder("DELETE FROM ")
+                .append(tableName)
+                .append(" WHERE ");
         Iterator<String> parameterIterator = mapOfParameters.keySet().iterator();
         while (parameterIterator.hasNext()) {
             String parameterName = parameterIterator.next();

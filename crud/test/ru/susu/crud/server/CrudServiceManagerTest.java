@@ -80,10 +80,10 @@ public class CrudServiceManagerTest {
         crudServiceManager.addFields(table, fields);
         String[] line = new String[]{"1", "Alex"};
         crudServiceManager.insertData(table, line);
-        assertArrayEquals(line, crudServiceManager.getData(table).get(0));
+        assertArrayEquals(line, crudServiceManager.getData(table)[0]);
         String[] newLine = new String[]{"1", "Ivan"};
         crudServiceManager.updateData(table, 0, newLine);
-        assertArrayEquals(newLine, crudServiceManager.getData(table).get(0));
+        assertArrayEquals(newLine, crudServiceManager.getData(table)[0]);
     }
 
     @Test
@@ -94,9 +94,9 @@ public class CrudServiceManagerTest {
         crudServiceManager.addFields(table, fields);
         String[] line = new String[]{"1", "Alex"};
         crudServiceManager.insertData(table, line);
-        assertArrayEquals(line, crudServiceManager.getData(table).get(0));
+        assertArrayEquals(line, crudServiceManager.getData(table)[0]);
         crudServiceManager.deleteData(table, 0);
-        assertEquals(0, crudServiceManager.getData(table).size());
+        assertEquals(0, crudServiceManager.getData(table).length);
     }
 
     @Test

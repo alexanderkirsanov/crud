@@ -7,11 +7,11 @@ import java.util.Map;
 
 public interface crudServiceAsync {
 
-    void getTables(AsyncCallback<List<String>> async);
+    void getTables(AsyncCallback<String[]> async);
 
-    void selectData(String table, AsyncCallback<List<String[]>> async);
+    void selectData(String table, AsyncCallback<String[][]> async);
 
-    void getHeaders(String tableName, AsyncCallback<List<String>> async);
+    void getHeaders(String tableName, AsyncCallback<String[]> async);
 
     void insertData(String table, String[] lines, AsyncCallback<Void> async);
 

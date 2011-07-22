@@ -1,0 +1,60 @@
+<?xml version ="1.0"?>
+<settings>
+    <user>lqip32</user>
+    <password>4f3v6</password>
+    <server>localhost</server>
+    <port>3306</port>
+    <database>test</database>
+
+    <table name="test">
+        <column>
+            <name>id</name>
+            <editor>text</editor>
+            <type>integer</type>
+            <is_null>false</is_null>
+            <size>-1</size>
+        </column>
+
+        <column>
+            <name>name</name>
+            <editor>text</editor>
+            <type>string</type>
+            <is_null>true</is_null>
+            <size>10</size>
+        </column>
+
+        <column>
+            <name>age</name>
+            <editor>text</editor>
+            <type>integer</type>
+            <is_null>true</is_null>
+            <size>10</size>
+        </column>
+    </table>
+
+    <table name="students">
+        <column>
+            <name>id</name>
+            <editor>text</editor>
+            <type>integer</type>
+            <is_null>true</is_null>
+            <size>-1</size>
+        </column>
+
+        <column>
+            <name>name</name>
+            <type>string</type>
+            <editor>text</editor>
+            <is_null>true</is_null>
+            <size>20</size>
+        </column>
+
+        <column>
+            <name>data</name>
+            <type>date</type>
+            <editor>date</editor>
+            <is_null>true</is_null>
+            <size>-1</size>
+        </column>
+    </table>
+</settings>

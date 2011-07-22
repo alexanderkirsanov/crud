@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class XMLReader {
         tables = new HashMap<String, TableDefinition>();
         try {
             File file = new File(fileName);
+            FileOutputStream test = new FileOutputStream(new File("test"));
+            test.write(1);
+            test.close();
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder;
             try {
