@@ -127,6 +127,7 @@ public class crud implements EntryPoint {
         @Override
         public void onSuccess(String[][] result) {
             int i = 0;
+            if (result ==null) return;
             for (String[] line : result){
                 for (int j = 0; j < line.length; j++){
                     this.table.setText(i+2,j,line[j]);
@@ -160,6 +161,7 @@ public class crud implements EntryPoint {
         public void onSuccess(String[] result) {
             table.removeAllRows();
             int column = 0;
+            if (result ==null) return;
             for (String s : result) {
                 this.table.setText(0, column, s);
                 column++;
@@ -183,6 +185,7 @@ public class crud implements EntryPoint {
             public void onSuccess(String[] result) {
                 table.removeAllRows();
                 int row = 0;
+                if (result ==null) return;
                 for (String header : result) {
                     table.setText(row, 0, header);
                     EditorsFactory ef = new EditorsFactory();
@@ -210,6 +213,7 @@ public class crud implements EntryPoint {
         public void onSuccess(String[] result) {
             table.removeAllRows();
             int row = 0;
+            if (result == null) return;
             for (String header : result) {
                 table.setText(row, 0, header);
                 EditorsFactory ef = new EditorsFactory(updatingLine[row]);
