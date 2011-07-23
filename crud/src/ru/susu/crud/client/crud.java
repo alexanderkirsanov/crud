@@ -5,15 +5,24 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.datepicker.client.DateBox;
+
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
  */
 public class crud implements EntryPoint {
+    public static final String PATTERN = "yyyy-MM-dd";
     private String currentTable;
+    private List<Map<String, String[]>> listOfEditors = new LinkedList<Map<String, String[]>>();
 
     private VerticalPanel chooseTablePanel = new VerticalPanel();
     private Label chooseTableLabel = new Label("Choose the table");
@@ -65,6 +74,8 @@ public class crud implements EntryPoint {
 
     private void baseView() {
         subMainPanel.clear();
+
+        setTableHeaderText(currentTable.toUpperCase());
 
         crudService.App.getInstance().getHeaders(currentTable, new ViewHeadersAsyncCallBack(mainTable));
         crudService.App.getInstance().selectData(currentTable, new ViewDataAsyncCallBack(mainTable));
@@ -127,7 +138,6 @@ public class crud implements EntryPoint {
         @Override
         public void onSuccess(String[][] result) {
             int i = 0;
-            if (result ==null) return;
             for (String[] line : result){
                 for (int j = 0; j < line.length; j++){
                     this.table.setText(i+2,j,line[j]);
@@ -161,7 +171,6 @@ public class crud implements EntryPoint {
         public void onSuccess(String[] result) {
             table.removeAllRows();
             int column = 0;
-            if (result ==null) return;
             for (String s : result) {
                 this.table.setText(0, column, s);
                 column++;
@@ -169,57 +178,73 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class ViewFieldsForInsertAsyncCallBack implements AsyncCallback<String[]> {
-            private FlexTable table;
+    private class ViewFieldsAsyncCallBack implements AsyncCallback<String[]> {
+        protected FlexTable table;
 
-            public ViewFieldsForInsertAsyncCallBack(FlexTable table) {
-                this.table = table;
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onSuccess(String[] result) {
-                table.removeAllRows();
-                int row = 0;
-                if (result ==null) return;
-                for (String header : result) {
-                    table.setText(row, 0, header);
-                    EditorsFactory ef = new EditorsFactory();
-                    table.setWidget(row, 1, ef.getEditor());
-                    row++;
-                }
-            }
-        }
-
-    private class ViewFieldsForUpdateAsyncCallBack implements AsyncCallback<String[]> {
-        private FlexTable table;
-        private String[] updatingLine;
-
-        public ViewFieldsForUpdateAsyncCallBack(FlexTable table, String[] updatingLine) {
+        public ViewFieldsAsyncCallBack(FlexTable table) {
             this.table = table;
-            this.updatingLine = updatingLine;
+            crudService.App.getInstance().getEditors(currentTable, new GetEditorsAsyncCallBack());
         }
 
         @Override
         public void onFailure(Throwable caught) {
-
+            //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override
         public void onSuccess(String[] result) {
             table.removeAllRows();
             int row = 0;
-            if (result == null) return;
             for (String header : result) {
                 table.setText(row, 0, header);
-                EditorsFactory ef = new EditorsFactory(updatingLine[row]);
-                table.setWidget(row, 1, ef.getEditor());
+                prepareEditor(row);
                 row++;
             }
+        }
+
+        protected void prepareEditor(int row){
+
+        }
+
+    }
+
+    private class ViewFieldsForInsertAsyncCallBack extends ViewFieldsAsyncCallBack{
+
+       public ViewFieldsForInsertAsyncCallBack(FlexTable table) {
+            super(table);
+       }
+
+       protected void prepareEditor(int row){
+            EditorsFactory ef = new EditorsFactory();
+            table.setWidget(row, 1, ef.getEditor(listOfEditors.get(row).get("type")[0]));
+       }
+
+    }
+
+    private class ViewFieldsForUpdateAsyncCallBack extends ViewFieldsAsyncCallBack{
+        private String[] updatingLine;
+
+        public ViewFieldsForUpdateAsyncCallBack(FlexTable table, String[] updatingLine) {
+            super(table);
+            this.updatingLine = updatingLine;
+        }
+
+        protected void prepareEditor(int row){
+            EditorsFactory ef = new EditorsFactory(updatingLine[row]);
+            table.setWidget(row, 1, ef.getEditor(listOfEditors.get(row).get("type")[0]));
+        }
+
+    }
+
+    private class GetEditorsAsyncCallBack implements AsyncCallback<List<Map<String, String[]>>> {
+        @Override
+        public void onFailure(Throwable caught) {
+
+        }
+
+        @Override
+        public void onSuccess(List<Map<String, String[]>> result) {
+            listOfEditors = result;
         }
     }
 
@@ -243,8 +268,9 @@ public class crud implements EntryPoint {
         @Override
         public void onClick(ClickEvent event) {
             String[] lines = new String[mainTable.getRowCount()];
+            EditorsFactory ef = new EditorsFactory();
             for (int i = 0; i < mainTable.getRowCount(); i++){
-                lines[i] = ((TextBox) mainTable.getWidget(i, 1)).getText();
+                lines[i] = ef.getContent(mainTable.getWidget(i, 1));
             }
             crudService.App.getInstance().insertData(currentTable, lines, new VoidAsyncCallback());
             baseView();
@@ -263,6 +289,7 @@ public class crud implements EntryPoint {
         @Override
         public void onClick(ClickEvent event) {
             subMainPanel.clear();
+
             setTableHeaderText("Update the entry");
             crudService.App.getInstance().getHeaders(currentTable, new ViewFieldsForUpdateAsyncCallBack(mainTable, updatingLine));
 
@@ -302,8 +329,9 @@ public class crud implements EntryPoint {
         @Override
         public void onClick(ClickEvent event) {
             String[] lines = new String[mainTable.getRowCount()];
+            EditorsFactory ef = new EditorsFactory();
             for (int i = 0; i < mainTable.getRowCount(); i++){
-                lines[i] = ((TextBox) mainTable.getWidget(i, 1)).getText();
+                lines[i] = ef.getContent(mainTable.getWidget(i, 1));
             }
             crudService.App.getInstance().updateData(currentTable, this.lineToUpdate, lines, new VoidAsyncCallback());
             baseView();
@@ -311,22 +339,67 @@ public class crud implements EntryPoint {
     }
 
     private class EditorsFactory {
-        private String textBoxText;
+        private String editorValue;
 
-        public EditorsFactory(){
-            this.textBoxText = null;
+        public EditorsFactory() {
+            this.editorValue = null;
         }
 
-        public EditorsFactory(String text) {
-            this.textBoxText = text;
+        public EditorsFactory(String value){
+            this.editorValue = value;
         }
 
-        public Widget getEditor(){
-            TextBox tb = new TextBox();
-            if (this.textBoxText!=null) {
-                tb.setText(textBoxText);
+        public Widget getEditor(String type){
+            Widget result = new Widget();
+
+            if (type.equals("TextEditor")){
+                TextBox tb = new TextBox();
+                if (this.editorValue!=null) {
+                tb.setText(editorValue);
+                }
+                result = tb;
             }
-            return tb;
+            if (type.equals("DateEditor")){
+                DateBox db = new DateBox();
+                DateBox.DefaultFormat df = new DateBox.DefaultFormat(DateTimeFormat.getFormat(PATTERN));
+                db.setFormat(df);
+                if (this.editorValue==null) {
+                    db.setValue(new Date(System.currentTimeMillis()));
+                }
+                else {
+                    DateTimeFormat dtf = DateTimeFormat.getFormat(PATTERN);
+                    db.setValue(dtf.parse(this.editorValue));
+                }
+
+
+                /*DateBox.Format df = new DateBox.DefaultFormat();
+                Date date = df.parse(db, editorValue, false);
+
+                db.setValue(date);*/
+                result = db;
+
+            }
+
+            return result;
+
+
+            /*TextBox tb = new TextBox();
+            if (this.editorType !=null) {
+                tb.setText(editorType);
+            }
+            return tb;*/
+        }
+
+        public String getContent(Widget widget) {
+            String result = null;
+            if (widget instanceof TextBox) {
+                result = ((TextBox)widget).getText();
+            }
+            if (widget instanceof DateBox) {
+                DateTimeFormat df = DateTimeFormat.getFormat(PATTERN);
+                result = df.format(((DateBox)widget).getValue());
+            }
+            return result;
         }
     }
 }
