@@ -1,9 +1,8 @@
 package ru.susu.crud.database.commands;
 
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
+import ru.susu.crud.database.dataset.IntegerField;
+import ru.susu.crud.database.dataset.StringField;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,19 +10,19 @@ public class DeleteCommandTest {
     @Test
     public void createCommandTest() throws Exception {
         DeleteCommand deleteCommand = new DeleteCommand("table");
-        Map<String, String> parameters = new HashMap<String, String>() {{
-            put("id", "12");
-            put("name", "ivan");
-            put("surname", "ivanov");
-        }};
+        StringField nameField = new StringField("name", "", "test", false);
+        StringField surnameField = new StringField("surname", "", "test", false);
+        IntegerField idField = new IntegerField("id", "", "test", false);
+        deleteCommand.setParameters(idField, "12");
+        deleteCommand.setParameters(nameField, "ivan");
+        deleteCommand.setParameters(surnameField, "ivanov");
 
-        assertEquals("DELETE FROM table WHERE id = 12 AND name = ivan AND surname = ivanov", deleteCommand.createCommand(parameters));
+        assertEquals("DELETE FROM table WHERE test.name = ivan AND test.surname = ivanov AND test.id = 12", deleteCommand.createCommand());
 
-        Map<String, String> simpleParameters = new HashMap<String, String>() {{
-            put("id", "12");
-        }};
+        DeleteCommand simpleDeleteCommand = new DeleteCommand("table");
+        simpleDeleteCommand.setParameters(idField, "12");
 
-        assertEquals("DELETE FROM table WHERE id = 12",deleteCommand.createCommand(simpleParameters));
+        assertEquals("DELETE FROM table WHERE test.id = 12", simpleDeleteCommand.createCommand());
 
     }
 }

@@ -34,27 +34,47 @@ public class SelectCommandTest {
     }
 
     @Test
+    public void limitTest() {
+        SelectCommand selectCommand = new SelectCommand("test", listOfField);
+        selectCommand.setLimitCount(1);
+        assertEquals(1, selectCommand.getLimitCount());
+        selectCommand.setUpLimit(2);
+        assertEquals(2, selectCommand.getUpLimit());
+    }
+
+    @Test
     public void createCommandTest() throws Exception {
         Map<Field, Filterable> mapOfFilters = new HashMap<Field, Filterable>();
         FieldFilter fieldFilter = FieldFilter.equals("ivanov");
-        mapOfFilters.put(nameField, fieldFilter);
-        SelectCommand selectCommand = new SelectCommand("test");
-        assertEquals("SELECT id, name, age FROM test WHERE CAST(test.name AS CHAR) = 'ivanov' ORDER BY age ASC",
-                selectCommand.createCommand(listOfField, mapOfFilters, ageField, "ASC"));
+        SelectCommand selectCommand = new SelectCommand("test", listOfField);
+        selectCommand.addFieldFilter(nameField, fieldFilter);
+        selectCommand.addOrderBy(ageField, "ASC");
+        assertEquals("SELECT id, name, age FROM test WHERE CAST(test.name AS CHAR) = 'ivanov' ORDER BY age ASC ",
+                selectCommand.createCommand());
     }
 
     @Test
     public void createSimpleCommandTest() throws Exception {
-        SelectCommand selectCommand = new SelectCommand("test");
-        assertEquals("SELECT id, name, age FROM test",
-                selectCommand.createCommand(listOfField, null, null, ""));
+        SelectCommand selectCommand = new SelectCommand("test", listOfField);
+        assertEquals("SELECT id, name, age FROM test ",
+                selectCommand.createCommand());
     }
 
     @Test
     public void createOnlyOrderCommandTest() throws Exception {
-        SelectCommand selectCommand = new SelectCommand("test");
-        assertEquals("SELECT id, name, age FROM test ORDER BY age ASC",
-                selectCommand.createCommand(listOfField, null, ageField, "ASC"));
+        SelectCommand selectCommand = new SelectCommand("test", listOfField);
+        selectCommand.addOrderBy(ageField, "ASC");
+        assertEquals("SELECT id, name, age FROM test ORDER BY age ASC ",
+                selectCommand.createCommand());
+    }
+
+    @Test
+    public void createOnlyLimitCommandTest() throws Exception {
+        SelectCommand selectCommand = new SelectCommand("test", listOfField);
+        selectCommand.setLimitCount(1);
+        selectCommand.setUpLimit(1);
+        assertEquals("SELECT id, name, age FROM test LIMIT 1,1",
+                selectCommand.createCommand());
     }
 
 }

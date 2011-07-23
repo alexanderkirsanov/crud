@@ -1,40 +1,31 @@
 package ru.susu.crud.database.commands;
 
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
+import ru.susu.crud.database.dataset.IntegerField;
+import ru.susu.crud.database.dataset.StringField;
 
 import static org.junit.Assert.assertEquals;
 
 public class UpdateCommandTest {
+
+
     @Test
     public void createCommandTest() throws Exception {
         UpdateCommand updateCommand = new UpdateCommand("test");
-        Map<String, String> actualParameters = new HashMap<String, String>() {{
-            put("id", "12");
-            put("name", "ivan");
-            put("surname", "ivanov");
-        }};
+        StringField nameField = new StringField("name", "", "test", false);
+        StringField surnameField = new StringField("surname", "", "test", false);
+        IntegerField idField = new IntegerField("id", "", "test", false);
+        updateCommand.setParameters(idField, "12", "12");
+        updateCommand.setParameters(nameField, "petr", "ivan");
+        updateCommand.setParameters(surnameField, "petrov", "ivanov");
 
-        Map<String, String> oldParameters = new HashMap<String, String>() {{
-            put("id", "12");
-            put("name", "petr");
-            put("surname", "petrov");
-        }};
-
-        assertEquals("UPDATE test SET id = 12, name = ivan, surname = ivanov WHERE id = 12 AND name = petr AND surname = petrov",
-                updateCommand.createCommand(oldParameters, actualParameters));
+        assertEquals("UPDATE test SET test.name = ivan, test.surname = ivanov, test.id = 12 WHERE test.name = petr AND test.surname = petrov AND test.id = 12",
+                updateCommand.createCommand());
 
         UpdateCommand simpleUpdateCommand = new UpdateCommand("test");
-        Map<String, String> simpleActualParameters = new HashMap<String, String>() {{
-            put("id", "12");
-        }};
+        simpleUpdateCommand.setParameters(idField, "13", "12");
 
-        Map<String, String> simpleOldParameters = new HashMap<String, String>() {{
-            put("id", "13");
-        }};
-        assertEquals("UPDATE test SET id = 12 WHERE id = 13",
-                        updateCommand.createCommand(simpleOldParameters, simpleActualParameters));
+        assertEquals("UPDATE test SET test.id = 12 WHERE test.id = 13",
+                simpleUpdateCommand.createCommand());
     }
 }

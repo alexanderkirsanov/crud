@@ -90,16 +90,13 @@ public class Dataset {
     }
 
     public void insertData(Map<Field, String> line) throws Exception {
-        Map<String, String> mapOfParameters = new HashMap<String, String>();
         if (line.keySet().size() != listOfField.size()) throw new Exception("Incorrect Line");
-        int i = 0;
+        InsertCommand insertCommand = new InsertCommand(listOfField.get(0).getSourceTable());
         for (Field field : listOfField) {
             FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
-            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line.get(field), false));
-            i++;
+            insertCommand.addParameters(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line.get(field), false));
         }
-        String insertCommand = new InsertCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfParameters);
-        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, insertCommand);
+        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, insertCommand.createCommand());
         engDataWriter.executeInsert();
         selectData();
     }
@@ -108,38 +105,40 @@ public class Dataset {
         Map<String, String> mapOfParameters = new HashMap<String, String>();
         Map<String, String> mapOfOldParameters = new HashMap<String, String>();
         if (line.keySet().size() != listOfField.size()) throw new Exception("Incorrect Line");
+        UpdateCommand updateCommand = new UpdateCommand(listOfField.get(0).getSourceTable());
         for (Field field : listOfField) {
             FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
-            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo), engCommandImp.getFieldValueForInsert(fieldInfo, line.get(field), false));
-            String oldParameter = engCommandImp.getFieldFullName(fieldInfo);
             String value = mapOfData.get(fieldInfo.getName()).get(lineNumber);
             String oldParameterValue = engCommandImp.getFieldValueForInsert(fieldInfo, value, false);
-            mapOfOldParameters.put(oldParameter, oldParameterValue);
+            String parameterValue = engCommandImp.getFieldValueForInsert(fieldInfo, line.get(field), false);
+            updateCommand.setParameters(field, oldParameterValue, parameterValue);
         }
-        String updateCommand = new UpdateCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfOldParameters, mapOfParameters);
-        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, updateCommand);
+        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, updateCommand.createCommand());
         engDataWriter.executeUpdate();
         selectData();
     }
 
     public void deleteData(int lineNumber) throws Exception {
         Map<String, String> mapOfParameters = new HashMap<String, String>();
-
+        DeleteCommand deleteCommand = new DeleteCommand(listOfField.get(0).getSourceTable());
         for (Field field : listOfField) {
             FieldInfo fieldInfo = engCommandImp.getFieldInfo(field);
-            mapOfParameters.put(engCommandImp.getFieldFullName(fieldInfo),
-                    engCommandImp.getFieldValueForDelete(fieldInfo,
-                            mapOfData.get(field.getName()).get(lineNumber)));
+            deleteCommand.setParameters(field, engCommandImp.getFieldValueForDelete(fieldInfo,
+                    mapOfData.get(field.getName()).get(lineNumber)));
         }
-        String deleteCommand = new DeleteCommand(listOfField.get(0).getSourceTable()).createCommand(mapOfParameters);
-        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, deleteCommand);
+
+        EngDataWriter engDataWriter = new EngDataWriter(connectionManager, deleteCommand.createCommand());
         engDataWriter.executeInsert();
         selectData();
     }
 
     public void selectData() throws Exception {
-        String selectCommand = new SelectCommand(listOfField.get(0).getSourceTable()).createCommand(listOfField, filters, sortbyField, sortType);
-        EngDataReader engDataReader = new EngDataReader(selectCommand, this, connectionManager);
+        SelectCommand selectCommand = new SelectCommand(listOfField.get(0).getSourceTable(), listOfField);
+        for (Field field : filters.keySet()) {
+            selectCommand.addFieldFilter(field, filters.get(field));
+        }
+        selectCommand.addOrderBy(sortbyField, sortType);
+        EngDataReader engDataReader = new EngDataReader(selectCommand.createCommand(), this, connectionManager);
         engDataReader.execute();
         dataUpdated();
     }

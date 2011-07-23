@@ -40,7 +40,7 @@ public class CrudServiceManager implements IPage {
     public String[][] getData(String tableName) {
         this.tableName = tableName;
         prepareDataset();
-        String[][] result = null;
+        String[][] result = new String[0][0];
         int rowCount = dataset.getRowCount();
         if (rowCount > 0) {
             result = new String[rowCount][dataset.getLine(0).length];
