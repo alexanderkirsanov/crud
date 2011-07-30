@@ -7,7 +7,10 @@ import ru.susu.crud.database.dataset.Dataset;
 import ru.susu.crud.database.dataset.Field;
 import ru.susu.crud.editor.Editor;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class CrudServiceManager implements IPage {
     private String tableName;
@@ -27,17 +30,13 @@ public class CrudServiceManager implements IPage {
         return result;
     }
 
-    private void prepareDataset() {
+    private void prepareDataset() throws Exception {
         this.dataset = DatasetRepository.getInstance().getDataset(this.tableName);
         this.fields = DatasetRepository.getInstance().getFields(this.tableName);
-        try {
-            this.dataset.selectData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.dataset.selectData();
     }
 
-    public String[][] getData(String tableName) {
+    public String[][] getData(String tableName) throws Exception {
         this.tableName = tableName;
         prepareDataset();
         String[][] result = new String[0][0];
@@ -56,7 +55,7 @@ public class CrudServiceManager implements IPage {
     }
 
 
-    public String[] getHeaders(String tableName) {
+    public String[] getHeaders(String tableName) throws Exception {
         this.tableName = tableName;
         prepareDataset();
         String[] result = new String[fields.size()];
@@ -69,36 +68,32 @@ public class CrudServiceManager implements IPage {
     }
 
 
-    public void insertData(String tableName, String[] lines) {
+    public void insertData(String tableName, String[] lines) throws Exception {
         this.tableName = tableName;
-        try {
-            prepareDataset();
-            Map<Field, String> mapOfValues = new HashMap<Field, String>();
-            int i = 0;
-            for (Field field : this.fields) {
-                mapOfValues.put(field, lines[i]);
-                i++;
-            }
-            this.dataset.insertData(mapOfValues);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        prepareDataset();
+        Map<Field, String> mapOfValues = new HashMap<Field, String>();
+        int i = 0;
+        for (Field field : this.fields) {
+            mapOfValues.put(field, lines[i]);
+            i++;
         }
+        this.dataset.insertData(mapOfValues);
+
     }
 
-    public void updateData(String tableName, int lineNumber, String[] newLine) {
+    public void updateData(String tableName, int lineNumber, String[] newLine) throws Exception {
         this.tableName = tableName;
-        try {
-            prepareDataset();
-            Map<Field, String> mapOfValues = new HashMap<Field, String>();
-            int i = 0;
-            for (Field field : this.fields) {
-                mapOfValues.put(field, newLine[i]);
-                i++;
-            }
-            this.dataset.updateData(lineNumber, mapOfValues);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        prepareDataset();
+        Map<Field, String> mapOfValues = new HashMap<Field, String>();
+        int i = 0;
+        for (Field field : this.fields) {
+            mapOfValues.put(field, newLine[i]);
+            i++;
         }
+        this.dataset.updateData(lineNumber, mapOfValues);
+
 
     }
 
@@ -112,11 +107,18 @@ public class CrudServiceManager implements IPage {
         }
     }
 
-    public List<Map<String, String[]>> getEditors(String tableName) {
+    public List<Map<String, String[]>> getEditors(String tableName) throws Exception {
         this.tableName = tableName;
         prepareDataset();
         Map<String, Editor> editorSetting = this.editors.get(tableName);
         List<Map<String, String[]>> listOfEditors = new LinkedList<Map<String, String[]>>();
+        String[] fieldArray = new String[fields.size()];
+        for (int i = 0; i < fields.size(); i++) {
+            fieldArray[i] = fields.get(i).getName();
+        }
+        HashMap<String, String[]> fields = new HashMap<String, String[]>();
+        fields.put("fields", fieldArray);
+        listOfEditors.add(fields);
         for (Field field : this.fields) {
             listOfEditors.add(editorSetting.get(field.getName()).getDefinition());
         }

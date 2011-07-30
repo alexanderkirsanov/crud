@@ -12,17 +12,17 @@ public interface crudService extends RemoteService {
 
     String[] getTables();
 
-   String[][] selectData(String table);
+   String[][] selectData(String table) throws Exception;
 
-    String[] getHeaders(String tableName);
+    String[] getHeaders(String tableName) throws Exception;
 
-    void insertData(String table, String[] lines);
+    String[][] insertData(String table, String[] lines) throws Exception;
 
-    void updateData(String table, int lineNumber, String[] newLine);
+    String[][] updateData(String table, int lineNumber, String[] newLine) throws Exception;
 
-    void deleteData(String table, int lineNumber);
+    String[][] deleteData(String table, int lineNumber) throws Exception;
 
-    List<Map<String, String[]>> getEditors(String tableName);
+    List<Map<String, String[]>> getEditors(String tableName) throws Exception;
 
     /**
      * Utility/Convenience class.

@@ -25,33 +25,52 @@ public class crudServiceImpl extends RemoteServiceServlet implements crudService
     }
 
     @Override
-    public String[][] selectData(String tableName) {
-        return crudServiceManager.getData(tableName);
-    }
-
-    @Override
-    public String[] getHeaders(String tableName) {
+    public String[] getHeaders(String tableName) throws Exception {
         return crudServiceManager.getHeaders(tableName);
     }
 
     @Override
-    public void insertData(String tableName, String[] lines) {
+    public String[][] insertData(String tableName, String[] lines) throws Exception {
         crudServiceManager.insertData(tableName, lines);
+        return selectData(tableName);
     }
 
     @Override
-    public void updateData(String table, int lineNumber, String[] newLine) {
+    public String[][] updateData(String table, int lineNumber, String[] newLine) throws Exception {
         crudServiceManager.updateData(table, lineNumber, newLine);
+        return selectData(table);
     }
 
     @Override
-    public void deleteData(String table, int lineNumber) {
+    public String[][] deleteData(String table, int lineNumber) throws Exception {
         crudServiceManager.deleteData(table, lineNumber);
+        return selectData(table);
     }
 
     @Override
-    public List<Map<String, String[]>> getEditors(String tableName) {
+    public List<Map<String, String[]>> getEditors(String tableName) throws Exception {
         return crudServiceManager.getEditors(tableName);
+    }
+
+    @Override
+    public String[][] selectData(String tableName) throws Exception {
+        String[] header = getHeaders(tableName);
+        String[][] data = crudServiceManager.getData(tableName);
+        String[][] result;
+        if (header.length != 0 && data.length != 0) {
+            result = new String[data.length + 1][header.length];
+            for (int i = 0; i < header.length; i++) {
+                result[0][i] = header[i];
+            }
+            System.arraycopy(data, 0, result, 1, data.length);
+
+        } else {
+            result = new String[1][header.length];
+            for (int i = 0; i < header.length; i++) {
+                result[0][i] = header[i];
+            }
+        }
+        return result;
     }
 
 
