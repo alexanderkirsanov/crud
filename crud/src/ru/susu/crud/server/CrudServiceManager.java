@@ -7,10 +7,7 @@ import ru.susu.crud.database.dataset.Dataset;
 import ru.susu.crud.database.dataset.Field;
 import ru.susu.crud.editor.Editor;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CrudServiceManager implements IPage {
     private String tableName;
@@ -107,22 +104,22 @@ public class CrudServiceManager implements IPage {
         }
     }
 
-    public List<Map<String, String[]>> getEditors(String tableName) throws Exception {
+    public String[][] getEditors(String tableName) throws Exception {
         this.tableName = tableName;
         prepareDataset();
         Map<String, Editor> editorSetting = this.editors.get(tableName);
-        List<Map<String, String[]>> listOfEditors = new LinkedList<Map<String, String[]>>();
-        String[] fieldArray = new String[fields.size()];
-        for (int i = 0; i < fields.size(); i++) {
-            fieldArray[i] = fields.get(i).getName();
-        }
-        HashMap<String, String[]> fields = new HashMap<String, String[]>();
-        fields.put("fields", fieldArray);
-        listOfEditors.add(fields);
+
+        ArrayList<String[]> parameters = new ArrayList<String[]>();
         for (Field field : this.fields) {
-            listOfEditors.add(editorSetting.get(field.getName()).getDefinition());
+            ArrayList<String> parametersOfField = new ArrayList<String>();
+            parametersOfField.add("field:::" + field.getName());
+            Map<String, String> definition = editorSetting.get(field.getName()).getDefinition();
+            for (String parameter : definition.keySet()) {
+                parametersOfField.add(parameter + ":::" + definition.get(parameter));
+            }
+            parameters.add(parametersOfField.toArray(new String[]{""}));
         }
-        return listOfEditors;
+        return parameters.toArray(new String[][]{{""}});
     }
 
     @Override

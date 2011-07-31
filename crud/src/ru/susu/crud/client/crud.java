@@ -11,10 +11,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
@@ -139,10 +137,8 @@ public class crud implements EntryPoint {
         }
     }
 
-    private class GetEditorsAsyncCallBack implements AsyncCallback<List<Map<String, String[]>>> {
+    private class GetEditorsAsyncCallBack implements AsyncCallback<String[][]> {
 
-
-        private int row;
         private FlexTable table;
         private String[] updatingLine = null;
 
@@ -150,27 +146,36 @@ public class crud implements EntryPoint {
             this.table = table;
         }
 
-        public GetEditorsAsyncCallBack(FlexTable table, int row, String[] updatingLine) {
+        public GetEditorsAsyncCallBack(FlexTable table, String[] updatingLine) {
             this.updatingLine = updatingLine;
             this.table = table;
-            this.row = row;
         }
 
         @Override
         public void onFailure(Throwable caught) {
-            caught.printStackTrace();
+            Window.alert(caught.toString());
         }
 
         @Override
-        public void onSuccess(List<Map<String, String[]>> result) {
+        public void onSuccess(String[][] result) {
             table.removeAllRows();
             int row = 0;
-            for (String header : result.get(0).get("fields")) {
+            List<Map<String, String>> listOfEditor = EditorsResultParser.parse(result);
+            for (Map<String,String> parameter : listOfEditor) {
+                String header = parameter.get("field");
                 table.setText(row, 0, header);
-                EditorsFactory ef = (updatingLine != null) ? new EditorsFactory(updatingLine[row]) : new EditorsFactory();
-                table.setWidget(row, 1, ef.getEditor(result.get(row + 1).get("type")[0]));
-                row++;
+                 EditorsFactory ef = (updatingLine != null) ? new EditorsFactory(updatingLine[row]) : new EditorsFactory();
+                 table.setWidget(row, 1, ef.getEditor(parameter.get("type")));
+                 row++;
             }
+
+            Button insertButton = new Button("Add to the table");
+
+            insertButton.addClickHandler(new InsertButtonClickHandler());
+
+            subMainPanel.add(tableHeader);
+            subMainPanel.add(mainTable);
+            subMainPanel.add(insertButton);
         }
     }
 
@@ -187,7 +192,6 @@ public class crud implements EntryPoint {
             try {
                 crudService.App.getInstance().deleteData(currentTableName, lineToDelete, new ViewDataAsyncCallBack(mainTable));
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
         }
@@ -205,7 +209,6 @@ public class crud implements EntryPoint {
             try {
                 crudService.App.getInstance().insertData(currentTableName, lines, new ViewDataAsyncCallBack(mainTable));
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
         }
     }
@@ -225,9 +228,8 @@ public class crud implements EntryPoint {
 
             setTableHeaderText("Update the entry");
             try {
-                crudService.App.getInstance().getEditors(currentTableName, new GetEditorsAsyncCallBack(mainTable, lineToUpdate, updatingLine));
+                crudService.App.getInstance().getEditors(currentTableName, new GetEditorsAsyncCallBack(mainTable, updatingLine));
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
             Button updateEntryButton = new Button("Update");
@@ -249,15 +251,8 @@ public class crud implements EntryPoint {
             try {
                 crudService.App.getInstance().getEditors(currentTableName, new GetEditorsAsyncCallBack(mainTable));
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
-            Button insertButton = new Button("Add to the table");
 
-            insertButton.addClickHandler(new InsertButtonClickHandler());
-
-            subMainPanel.add(tableHeader);
-            subMainPanel.add(mainTable);
-            subMainPanel.add(insertButton);
         }
     }
 
@@ -331,6 +326,21 @@ public class crud implements EntryPoint {
                 result = df.format(((DateBox) widget).getValue());
             }
             return result;
+        }
+    }
+
+    private static class EditorsResultParser {
+        public static List<Map<String, String>> parse(String[][] array) {
+            List<Map<String, String>> listOfParameter = new LinkedList<Map<String, String>>();
+            for (String[] str : array) {
+                HashMap<String, String> parameters = new HashMap<String, String>();
+                for (String parameter : str) {
+                    String[] keyValue = parameter.split(":::");
+                    parameters.put(keyValue[0], keyValue[1]);
+                }
+                listOfParameter.add(parameters);
+            }
+            return listOfParameter;
         }
     }
 }

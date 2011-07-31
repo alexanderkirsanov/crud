@@ -22,7 +22,7 @@ public interface crudService extends RemoteService {
 
     String[][] deleteData(String table, int lineNumber) throws Exception;
 
-    List<Map<String, String[]>> getEditors(String tableName) throws Exception;
+    String[][] getEditors(String tableName) throws Exception;
 
     /**
      * Utility/Convenience class.

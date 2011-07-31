@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class DateEditor implements Editor {
     @Override
-    public Map<String, String[]> getDefinition() {
-        Map<String, String[]> definition = new HashMap<String, String[]>();
-        definition.put("type", new String[]{this.getClass().getSimpleName()});
+    public Map<String, String> getDefinition() {
+        Map<String, String> definition = new HashMap<String, String>();
+        definition.put("type", this.getClass().getSimpleName());
         return definition;
     }
 

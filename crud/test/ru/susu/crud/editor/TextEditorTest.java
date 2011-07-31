@@ -18,9 +18,9 @@ public class TextEditorTest {
 
     @Test
     public void getDefinitionTest() throws Exception {
-        Map<String, String[]> definition = textEditor.getDefinition();
-        assertEquals("TextEditor", definition.get("type")[0]);
-        assertEquals("10", definition.get("size")[0]);
+        Map<String, String> definition = textEditor.getDefinition();
+        assertEquals("TextEditor", definition.get("type"));
+        assertEquals("10", definition.get("size"));
     }
 
     @Test

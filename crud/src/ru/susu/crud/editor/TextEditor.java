@@ -16,10 +16,10 @@ public class TextEditor implements Editor {
     }
 
     @Override
-    public Map<String, String[]> getDefinition() {
-        Map<String, String[]> definition = new HashMap<String, String[]>();
-        definition.put("type", new String[]{this.getClass().getSimpleName()});
-        definition.put("size", new String[]{String.valueOf(size)});
+    public Map<String, String> getDefinition() {
+        Map<String, String> definition = new HashMap<String, String>();
+        definition.put("type", this.getClass().getSimpleName());
+        definition.put("size", String.valueOf(size));
         return definition;
     }
 

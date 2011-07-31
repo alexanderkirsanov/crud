@@ -10,7 +10,7 @@ public class DateEditorTest {
     @Test
     public void getDefinitionTest() throws Exception {
         DateEditor dateEditor = new DateEditor();
-        Map<String, String[]> definition = dateEditor.getDefinition();
-        assertEquals("DateEditor", definition.get("type")[0]);
+        Map<String, String> definition = dateEditor.getDefinition();
+        assertEquals("DateEditor", definition.get("type"));
     }
 }
