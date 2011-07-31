@@ -70,13 +70,7 @@ public class crud implements EntryPoint {
         } catch (Exception e) {
         }
 
-        mainTable.setBorderWidth(1);
-        mainTable.setCellSpacing(0);
-        mainTable.setCellPadding(4);
 
-        subMainPanel.add(tableHeader);
-        subMainPanel.add(mainTable);
-        subMainPanel.add(addEntryButton);
     }
 
     private class ViewTablesAsyncCallBack implements AsyncCallback<String[]> {
@@ -116,6 +110,8 @@ public class crud implements EntryPoint {
 
         @Override
         public void onSuccess(String[][] result) {
+            subMainPanel.clear();
+            tableHeader.setText("");
             mainTable.removeAllRows();
             this.table.removeAllRows();
             int i = 0;
@@ -134,6 +130,13 @@ public class crud implements EntryPoint {
                 }
                 i++;
             }
+            mainTable.setBorderWidth(1);
+            mainTable.setCellSpacing(0);
+            mainTable.setCellPadding(4);
+
+            subMainPanel.add(tableHeader);
+            subMainPanel.add(mainTable);
+            subMainPanel.add(addEntryButton);
         }
     }
 
@@ -141,14 +144,16 @@ public class crud implements EntryPoint {
 
         private FlexTable table;
         private String[] updatingLine = null;
+        private int lineForUpdate;
 
         public GetEditorsAsyncCallBack(FlexTable table) {
             this.table = table;
         }
 
-        public GetEditorsAsyncCallBack(FlexTable table, String[] updatingLine) {
+        public GetEditorsAsyncCallBack(FlexTable table, int lineForUpdate, String[] updatingLine) {
             this.updatingLine = updatingLine;
             this.table = table;
+            this.lineForUpdate = lineForUpdate;
         }
 
         @Override
@@ -158,24 +163,28 @@ public class crud implements EntryPoint {
 
         @Override
         public void onSuccess(String[][] result) {
+            subMainPanel.clear();
             table.removeAllRows();
             int row = 0;
             List<Map<String, String>> listOfEditor = EditorsResultParser.parse(result);
-            for (Map<String,String> parameter : listOfEditor) {
+            for (Map<String, String> parameter : listOfEditor) {
                 String header = parameter.get("field");
                 table.setText(row, 0, header);
-                 EditorsFactory ef = (updatingLine != null) ? new EditorsFactory(updatingLine[row]) : new EditorsFactory();
-                 table.setWidget(row, 1, ef.getEditor(parameter.get("type")));
-                 row++;
+                EditorsFactory ef = (updatingLine != null) ? new EditorsFactory(updatingLine[row]) : new EditorsFactory();
+                table.setWidget(row, 1, ef.getEditor(parameter.get("type")));
+                row++;
             }
-
-            Button insertButton = new Button("Add to the table");
-
-            insertButton.addClickHandler(new InsertButtonClickHandler());
-
+            Button button;
+            if (updatingLine == null) {
+                button = new Button("Add to the table");
+                button.addClickHandler(new InsertButtonClickHandler());
+            } else {
+                button = new Button("Update");
+                button.addClickHandler(new UpdateEntryButtonClickHandler(lineForUpdate));
+            }
             subMainPanel.add(tableHeader);
             subMainPanel.add(mainTable);
-            subMainPanel.add(insertButton);
+            subMainPanel.add(button);
         }
     }
 
@@ -228,7 +237,7 @@ public class crud implements EntryPoint {
 
             setTableHeaderText("Update the entry");
             try {
-                crudService.App.getInstance().getEditors(currentTableName, new GetEditorsAsyncCallBack(mainTable, updatingLine));
+                crudService.App.getInstance().getEditors(currentTableName, new GetEditorsAsyncCallBack(mainTable, lineToUpdate, updatingLine));
             } catch (Exception e) {
             }
 
@@ -273,7 +282,7 @@ public class crud implements EntryPoint {
             try {
                 crudService.App.getInstance().updateData(currentTableName, this.lineToUpdate, lines, new ViewDataAsyncCallBack(mainTable));
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
         }
     }
